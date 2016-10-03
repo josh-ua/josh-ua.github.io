@@ -1,0 +1,19 @@
+
+body{
+	background-image: url("photo-1465205568425-23fdd3805e49.jpg");
+	background-repeat:no-repeat;
+	width:auto;
+	height:auto;
+	-webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+	background-size:cover;
+
+
+}
+
+#top {
+
+	padding-top:10%;
+
+}
