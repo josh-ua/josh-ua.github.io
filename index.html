@@ -9,6 +9,8 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
     <link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald" rel="stylesheet">
+    <script src="https://use.fontawesome.com/4c8d393071.js"></script>
+
 </head>
 <body>
 	<div class="container-fluid">
@@ -23,23 +25,40 @@
         <div class="col-md-4"></div>
 
         <div class="col-md-4">
-          <div class="jumbotron">
+          <div class="jumbotron container-fluid">
             <div class="page-header">
               <h1><center>joshua karper</center></h1>
             </div>
-              <h4><center>Software engineer, University Student and Planet gazer</center></h4>
 
-              <div class="container-fluid">
-                <ul class="nav nav-tabs nav-justified" id="navbar">
-                  <li class="active"><a href="#">home</a></li>
-                  <li><a href="#"> about </a></li>
-                  <li><a href="#"> projects </a></li>
-                  <li><a href="#"> resume</a></li>
-                  <li><a href="#"> contact</a></li>
-                </ul>
+
+              <div class = "tab-content">
+                <div id="home" class="tab=pane fade in active">
+                  <h4><center>Software engineer, University Student and Planet gazer</center></h4>
+                </div>
+                <div id="about" class="tab=pane fade">
+                  <p>hello</p>
+                    <p>hello</p>
+                </div>
+                <div id="projects" class="tab=pane fade">
+                  <p>f</p>
+                </div>
               </div>
 
 
+              <div class="container">
+                <ul class="nav nav-tabs nav-justified" id="navbar">
+                  <li><a data-toggle="tab" href="#about"> about </a></li>
+                  <li class="active"><a data-toggle="tab" href="#home">home</a></li>
+                  <li><a href="#projects"> projects </a></li>
+
+                </ul>
+              </div>
+
+              <div class="container" id="links">
+                <p><i class="fa fa-github" aria-hidden="true"></i>
+                    <i class="fa fa-envelope" aria-hidden="true"></i> <i class="fa fa-file" aria-hidden="true"></i>
+</p>
+              </div>
           </div>
 				</div>
 

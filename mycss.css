@@ -13,6 +13,7 @@ body{
 
 .jumbotron{
 	  background-color: #f1d7c3;
+
 }
 .page-header{
 	margin: -20px 0px 20px;
@@ -31,4 +32,8 @@ body{
 #navbar{
 	margin: 20px 0px -40px;
 	font-size:12px;
+}
+#links{
+	margin: 50px 0px -50px;
+	text-align:center;
 }
