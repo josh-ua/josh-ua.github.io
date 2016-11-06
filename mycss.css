@@ -45,3 +45,7 @@ body{
 #iam{
 	text-indent: 50px;
 }
+.media-body p{
+		font-size: 13px;
+		text-align: justify;
+}
