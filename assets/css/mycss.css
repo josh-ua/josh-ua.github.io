@@ -49,14 +49,17 @@ body{
 	text-align:center;
 	font-size:12px;
 }
-#navbar{
-	margin: 20px 0px -40px;
-	font-size:12px;
-}
+
 #links{
-	margin: -20px 0px -50px;
+	margin: -20px 0px -90px;
 	text-align:center;
-	font-size: 16px;
+}
+#links a {
+	color:inherit;
+	font-size: 26px;
+}
+#links a:hover{
+	color:grey;
 }
 #iam{
 	text-indent: 50px;
