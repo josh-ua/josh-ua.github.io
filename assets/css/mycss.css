@@ -69,8 +69,14 @@ body{
 	text-indent: 50px;
 }
 #gohome{
-	text-decoration-color: inherit;
+	text-align: center;
+
 }
+#gohome a{
+	font-size: inherit;
+	color: inherit;
+}
+
 #projects{
 	clear: both;
 }
