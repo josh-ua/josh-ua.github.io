@@ -51,8 +51,12 @@ body{
 }
 
 #links{
-	margin: -20px 0px -90px;
 	text-align:center;
+	clear: both;
+}
+#links p{
+	font-size:10px;
+	margin: -0px 0px -30px;
 }
 #links a {
 	color:inherit;
@@ -66,5 +70,8 @@ body{
 }
 #gohome{
 	text-decoration-color: inherit;
+}
+#projects{
+	clear: both;
 }
 
