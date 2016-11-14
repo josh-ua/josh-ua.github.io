@@ -1,9 +1,12 @@
 
 body{
-	background-color: #7da3be;
+	background-color: #808388;
 	background-repeat:repeat;
 
 
+}
+hr{
+  border-top: 1px solid #808388;
 }
 
 #top {
@@ -12,11 +15,11 @@ body{
 }
 
 .jumbotron{
-	  background-color: #f1d7c3;
-
+	  background-color: #A1B4C3;
 }
 .page-header{
 	margin: -20px 0px 20px;
+	border-color: #808388;
 }
 
 .page-header h1{
@@ -28,6 +31,10 @@ body{
 
 .tab-content #info p{
 	text-align: center;
+}
+.tab-content #info a{
+	font-color:A0474B;
+
 }
 
 .panel-body p {
@@ -80,4 +87,3 @@ body{
 #projects{
 	clear: both;
 }
-
