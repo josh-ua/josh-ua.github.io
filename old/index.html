@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Josh Karper</title>
+    <meta property="og:description" content="The personal site of Josh Karper.">
+    <meta property="og:image" content="http://josh.dk/assets/img/initials.png">
+
+    <link rel="icon" type="image/png" href="assets/img/favicon-16x16.png" sizes="16x16" />
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+		<link rel="stylesheet" href="assets/css/mycss.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald" rel="stylesheet">
+    <script src="https://use.fontawesome.com/4c8d393071.js"></script>
+
+</head>
+<body>
+	<div class="container-fluid">
+    <div class = "row">
+      <div class="col-xs-12 col-sm-3 col-md-4"></div>
+      <div class="col-xs-12 col-sm-3 col-md-4"></div>
+      <div class="col-xs-12 col-sm-3 col-md-4"></div>
+    </div>
+
+		<div class ="row" id="top">
+      <div class="col-xs-12 col-sm-2 col-md-2 col-lg-4 col-xl-4"></div>
+
+      <div class="col-xs-12 col-sm-8 col-md-8 col-lg-4 col-xl-4">
+        <div class="jumbotron container-fluid">
+          <div id = "i-am">
+            <h4>hi, I'm...</h4>
+          </div>
+          <div class="page-header">
+            <div class= "media-left">
+            <!--  <img src="me.PNG" class = "img-circle float-left" width:"100px" height="100px"> -->
+            </div>
+            <div class="media-body">
+              <h1 style="text-align: center">josh karper</h1>
+            </div>
+          </div>
+
+            <div class = "tab-content">
+              <div id = "info" class="tab-pane fade in active">
+                <p>...and I'm a <strong>2nd year university student</strong> at the <a target="_blank" href="http://www.umd.edu/" data-toggle="tooltip" title="go Terps!"> University of Maryland, College Park</a> majoring in <a target="_blank"  href="http://cs.umd.edu/" data-toggle="tooltip" title="14th best in the nation!">Computer Science</a>.</p>
+              <!---  <p> I'm currently at <a href="https://ideacrew.com/">IdeaCrew</a>, working on the <br><a href="https://www.dchealthlink.com/">DC Health Link project</a>.</br></p> -->
+              <!---  <p> I just started at <a href="https://ideacrew.com/">IdeaCrew</a>, working on the <br><a href="https://www.dchealthlink.com/">DC Health Link project</a>.</br> At my last job, I worked with the IT Department at the UMD Department of Economics.</p> -->
+                <p> I like to work on cool things and am actively <strong>looking for internships</strong> and similar opportunities. <br>(located anywhere - I love to explore!)</br></p>
+                <p>Please feel free to <a href="mailto:karperj@umd.edu" data-toggle="tooltip" title="(don't actually shoot me)">shoot me an e-mail</a>, or check out some of <a data-toggle="tab" href="#projects">my projects</a>.</p>
+              </div>
+
+              <div id = "projects" class = "tab-pane fade">
+                <h5 style="text-align: center">...and here are a few of my <strong>selected</strong> projects:</h5>
+                <div class="panel-group" id="accordion">
+                    
+                    <div class="panel panel-default">
+                      <div class="panel-heading">
+                        <h4 class="panel-title">
+                          <a data-toggle="collapse" data-parent="#accordion" href="#collapse1">Twitter Contest Bot</a>
+                        </h4>
+                      </div>
+                      <div id="collapse1" class="panel-collapse collapse in">
+                        <div class="panel-body"> 
+                        <p>Twitter is filled tweets by companies and individuals such as "like and follow to win" and "retweet to win." <strong>contestor</strong> is a Twitter bot that finds these tweets, parses them, and then performs the action needed to enter the contest. </p>
+                        <p>I ran contestor for about a month and was able to enter over <strong>20,000 contents</strong>, and won 16. You can view what I won <a target="_blank" href="https://github.com/josh-ua/contestor/blob/master/thingswon.md">here.</a></p>
+                        
+                        </div>
+                        <div class ="panel-footer">
+                          <span class= "technologies">Technologies used: Python</span>
+                          <span class = "githubprojects"><a target="_blank" href="https://github.com/josh-ua/contestor"><i class="fa fa-github" aria-hidden="true" data-toggle="tooltip" title="check it out on github!"></i></a></span>
+                        </div>
+                      </div>
+                    </div>
+                   
+                    <div class="panel panel-default">
+                      <div class="panel-heading">
+                        <h4 class="panel-title">
+                          <a data-toggle="collapse" data-parent="#accordion" href="#collapse2">Earthquake Globe</a>
+                        </h4>
+                      </div>
+                      <div id="collapse2" class="panel-collapse collapse">
+                        <div class="panel-body">
+                          <p>Globe that <strong>visualizes recent earthquake data</strong>. Ability to view earthquakes within the past 24 hours, 7 days, or 30 days. Data is updated every 24 hours with a <strong>Python</strong> script. Built upon the Google Chrome team's WebGL Globe experiment. You can check it out by <a target ="_blank" href="http://ks3099106.kimsufi.com/josh/earthquakes/">clicking here</a>.</p>
+                        </div>
+                        <div class ="panel-footer">
+                          <span class= "technologies">Technologies used: Python, JavaScript, WebGL Globe</span>
+                          <span class = "githubprojects"><a target="_blank" href="https://github.com/josh-ua/earthquake-webgl-globe"><i class="fa fa-github" aria-hidden="true" data-toggle="tooltip" title="check it out on github!"></i></a></span>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div class="panel panel-default">
+                      <div class="panel-heading">
+                        <h4 class="panel-title">
+                          <a data-toggle="collapse" data-parent="#accordion" href="#collapse3">Personal website</a>
+                        </h4>
+                      </div>
+                      <div id="collapse3" class="panel-collapse collapse">
+                        <div class="panel-body">
+                          <p>You're looking at it! I challenged myself to build something <strong>simple</strong> yet <strong>informative</strong>, and this was the result. Built from the groundup with the help of Twitter's Bootstrap Framework and hosted with Github Pages.<p>     
+                        </div>
+                        <div class="panel-footer">
+                          <span class= "technologies">Technologies used: Bootstrap, HTML/CSS</span>
+                          <span class = "githubprojects"><a target="_blank" href="https://www.github.com/josh-ua/josh-ua.github.io"><i class="fa fa-github" aria-hidden="true" data-toggle="tooltip" title="check it out on github!"></i></a></span>
+
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <span id="gohome"><h5><a data-toggle="tab" href="#info"> &lt;&lt;head back home&lt;&lt; </a></h5></span>
+              </div>
+
+
+
+
+            <div class="container" id="links">
+              <div class = "row">
+                <hr></hr>
+                  <div class="col-xs-4">
+                    <p><a target="_blank" href="https://www.github.com/josh-ua"><i class="fa fa-github" aria-hidden="true" data-toggle="tooltip" title="github!"></i></a></p>
+                  </div>
+                  <div class="col-xs-4">
+                    <p><a target="_blank" href="mailto:karperj@umd.edu"><i class="fa fa-envelope" aria-hidden="true" data-toggle="tooltip" title="e-mail me"></i></a></p>
+                    </div>
+                  <div class="col-xs-4">
+                    <p><a target="_blank" href="assets/docs/joshua_karper_resume_11_13_2016.pdf"><i class="fa fa-file" aria-hidden="true" data-toggle="tooltip" title="resume"></i></a></p>
+                  </div>
+                </div>
+                <div class = "row">
+                  <p></p>
+                </div>
+
+            </div>
+        </div>
+			</div>
+
+			<div class="col-xs-12 col-sm-2 col-md-2 col-lg-4">
+  </div>
+
+
+
+</body>
+</html>
