@@ -1,0 +1,56 @@
+@media screen and (min-width: 640px){
+	html { 
+	  background: url(../img/ns.jpg) no-repeat center center fixed; 
+	  -webkit-background-size: cover;
+	  -moz-background-size: cover;
+	  -o-background-size: cover;
+	  background-size: cover;
+	}
+	#hello {
+		padding-top: 15%;
+	}
+}
+@media screen and (max-width: 640px){
+ body {
+    background: #2f444b; /* For browsers that do not support gradients */
+    background: -webkit-linear-gradient(#192426, #2f444b); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(#192426, #2f444b); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(#192426, #2f444b); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(#192426, #2f444b); /* Standard syntax */
+	}
+
+	#hello {
+		padding-top: 50%;
+
+	}
+ 
+ }
+} 
+
+
+h1 {
+	font-family: 'Oswald', sans-serif;
+}
+
+p {
+	font-family: 'Open Sans', sans-serif;
+}
+#hello {
+	
+	color: white;
+	text-align: center;
+}
+
+#bar{
+	text-align: center;
+	font-size: 25px;
+  	
+
+}
+.icon{
+	float:left;
+	display: inline-block;
+}
+.icon:hover{
+	font-size: 35px;
+}
