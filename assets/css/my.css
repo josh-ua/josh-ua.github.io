@@ -57,3 +57,8 @@ p {
 .icon:hover{
 	font-size: 35px;
 }
+
+#me {
+	border-radius: 50%;
+
+}
