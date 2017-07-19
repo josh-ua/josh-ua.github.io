@@ -62,3 +62,6 @@ p {
 	border-radius: 50%;
 
 }
+a {
+	color:inherit;
+}
