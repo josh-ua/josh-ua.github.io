@@ -7,7 +7,7 @@
 	  background-size: cover;
 	}
 	#hello {
-		padding-top: 15%;
+		padding-top: 10%;
 	}
 }
 @media screen and (max-width: 640px){
@@ -25,6 +25,10 @@
 	}
 	.icon {
 		padding-bottom: 5%;
+	}
+	#me {
+		height: 50%;
+    	
 	}
  
  }
