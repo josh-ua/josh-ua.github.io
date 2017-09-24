@@ -18,27 +18,20 @@
     background: -moz-linear-gradient(#192426, #2f444b); /* For Firefox 3.6 to 15 */
     background: linear-gradient(#192426, #2f444b); /* Standard syntax */
 	}
-
 	#hello {
 		padding-top: 25%;
-
 	}
 	.icon {
 		padding-bottom: 5%;
 	}
 	#me {
-		height: 50%;
-    	
+		display:none;	
 	}
- 
  }
 } 
-
-
 h1 {
 	font-family: 'Oswald', sans-serif;
 }
-
 p {
 	font-family: 'Open Sans', sans-serif;
 }
@@ -52,7 +45,6 @@ p {
 	text-align: center;
 	font-size: 25px;
   	
-
 }
 .icon{
 	float:left;
@@ -63,8 +55,8 @@ p {
 }
 
 #me{
-	border-radius: 50%;
-
+	height: 20%;   
+	border-radius: 40%;
 }
 a {
 	color:inherit;
