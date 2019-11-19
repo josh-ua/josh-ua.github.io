@@ -1,59 +1,30 @@
-@media screen and (min-width: 640px){
-	body { 
-	  background: #2f444b;
-	  background-image: url(../img/asfalt-light.png); 
-	}
-	#hello {
-		padding-top: 10%;
-	}
+body {
+	background-color: #bcd3f2;
+	margin: 0;
+    height: 100%;
 }
-@media screen and (max-width: 640px){
- 	body {
-    background: #2f444b; /* For browsers that do not support gradients */
-    background: -webkit-linear-gradient(#192426, #2f444b); /* For Safari 5.1 to 6.0 */
-    background: -o-linear-gradient(#192426, #2f444b); /* For Opera 11.1 to 12.0 */
-    background: -moz-linear-gradient(#192426, #2f444b); /* For Firefox 3.6 to 15 */
-    background: linear-gradient(#192426, #2f444b); /* Standard syntax */
-	}
-	#hello {
-		padding-top: 25%;
-	}
-	.icon {
-		padding-bottom: 5%;
-	}
-	#me {
-		display:none;	
-	}
- }
-} 
 h1 {
-	font-family: 'Oswald', sans-serif;
+	font-family: 'Calistoga', cursive;
+	color: #395c6b;
+	font-size:8vmax;
 }
 p {
-	font-family: 'Open Sans', sans-serif;
+	font-family: 'Roboto', sans-serif;
+	color: #395c6b;
+	font-size:2vmax;
 }
-#hello {
-	
-	color: white;
-	text-align: center;
-}
+.container {
+	margin-left: 10%;
+	margin-right: 10%;
+	display: flex;
+	flex-direction: column;
 
-#bar{
-	text-align: center;
-	font-size: 25px;
-  	
 }
-.icon{
-	float:left;
-	display: inline-block;
+a, a:link, a:visited {
+	text-decoration: none;
+	border-bottom: 0.5vw solid #f1dede;
+	color: inherit;
 }
-.icon:hover{
-	font-size: 35px;
-}
-#me{
-	height: 20%;   
-	border-radius: 40%;
-}
-a {
-	color:inherit;
+a:hover {
+	color: #2d4a56;
 }
