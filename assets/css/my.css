@@ -24,7 +24,9 @@ h1 {
 		margin-top: 50%;
 		font-size: 18px !important;
 	}
-
+	h3 {
+		font-size: 18px !important;
+	}
   }
 
   @media only screen and (min-width: 451px) {
@@ -32,13 +34,11 @@ h1 {
 		display: none;
 	}
 }
-.times {
-	font-family: 'Montserrat', cursive;
-}
 
 .links {
 	margin-top: 10%;
 }
+
 .link {
 	font-family: 'Raleway', sans-serif;
 	background: rgba(245,215,110,.65);
@@ -51,7 +51,6 @@ h1 {
 .link:hover {
 	background-color: #f5d76e;
 }
-
 
 h1:after {
 	content: "";
