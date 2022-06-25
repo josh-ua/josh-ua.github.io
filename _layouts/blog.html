@@ -1,0 +1,23 @@
+---
+layout: page
+---
+
+{%- include back_home.html -%}
+<div class="home">
+  {%- if site.posts.size > -1 -%}
+    <h2 class="post-list-heading">{{ page.list_title | default: "Posts" }}</h2>
+    {{ content }}
+    <ul class="post-list">
+      {%- for post in site.posts -%}
+      <li class="post-row">
+        {%- assign date_format = site.minima.date_format | default: "%b %-d, %Y" -%}
+          <a class="post-link" href="{{ post.url | relative_url }}">
+            {{ post.title | escape }}
+          </a>
+        <span class="post-meta">{{ post.date | date: date_format }}</span>
+      </li>
+      {%- endfor -%}
+    </ul>
+  {%- endif -%}
+
+</div>
