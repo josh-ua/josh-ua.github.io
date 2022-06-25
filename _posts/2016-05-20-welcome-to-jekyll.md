@@ -1,1 +1,36 @@
-s
+---
+layout: post
+title:  "On Pink Capitalism and Corporate Pride"
+date:   2022-06-25 01:00:00 -0700
+---
+
+> ![My favorite Corporate Pride critique meme](/assets/img/pink-cap/see_you_in_hell_fruit.png){: height="300" }
+> My favorite Corporate Pride critique meme
+
+At the time of writing this, it’s Pride Month in the United States. Step out into any major metropolitan city within the states and the streets are undoubtedly lined with rainbow flags and artwork to showcase the city’s solidarity with the LGBTQ+ community. Stick around and you’ll see parades and festivals. Even in smaller cities and communities, Pride has become a June staple. 
+
+What started out in the 70s as an underground movement has now blossomed into something that is (in my opinion, excitedly) much more mainstream. One of the newest facets of Pride month within the past few years has been the involvement of a lot more corporations joining in the support of the LGBT+ community. Companies now change their logos during pride, create cutesy gay commericals & even participate in and sponsor Pride related events such as parades.
+
+Of course, nothing is fun without some controversy.  No, we’re not talking about police presence at Pride (we’ll save that for another blog post) - but instead the involvement of said corporations within our June celebrations. Within the past few years, there have been many critiques about the corporate involvement in Pride and targeted advertising to queer audiences in general.
+
+But, is corporate involvement in Pride inheritly bad for the queer community? What about advertising to queer people specifically? At the surface level, there are many valid critiques of the inherit commedification of the queer experience. However, ultimately, since we live in a capitalist society, I’d argue that these are quite the step forward for the LGBT+ community.
+
+So, what’s in it for the corporations in their involvement in Pride? Money, of course - it’s just another form of advertising. “Pink Capitalism” has become the catch-all term for the LGBTQ’s community involvement in capitalism. What started out as mainly social gathering venues such as nightclubs and bars has now expanded to corporation involvement in the form of advertising. Likewise, the spending power of the LGBTQ+ community has been recognized with the advent of terms such as “Pink Dollars.”
+
+Through the capitalist lense -- a corporation has one goal in mind: to create value for its shareholders. Surely corporations aren’t participating in Pride festivals and making inclusive commercials and products to further the agenda of the LGBT+ acceptance for the good of society. It just turns out we’re a great advertising demographic, and corporations now want their fair share of the pink dollars. Involvement in pride is an advertisement for corporations and a simple way to tap into Rainbow Capitalism and the Pink Dollar market. 
+
+Those who are staunchly against corporations involvement in Pride are against the idea of profiting off of the queer experience. Many disenters here will argue that it’s shameful to the history of Pride and the shared queer experience. There is some validity in this argument: yes, corporations are profiting off of the queer experience and it does feel kind of weird. However, I think using this logic as fuel against corporate involvement in pride is very narrow and incomplete. Coroporations profiting from the shared experience of a community isn’t exclusive to the queer community, and thus I don’t think is shameful the our shared experiences.  
+
+If one holds this view, they shouldn’t just be upset with the commeidization of the queer community, but the commidizoation of every other facet of their identity. Ask any Marxist --  at its core, this is a class issue that supercedes just the queer community. Now, this isn’t a blog post exploring why (or why not) the exploitation of communities by corporations is inherently bad, but in the western world, we live in Capitalist society, and this is the reality we face. Now, with that being said: there are benefits to corporations participating in pride -- or dare I say, benefits to corporations exploiting the queer community (too on the nose?).
+
+The most apparent benefit is that Corporate involvement in pride allows LGBT people to gain the national stand at very little cost. In a Capitalist society, corporations have a lot of power and levers to pull to shift societal visions, mainly in the form of $$ and advertising. Do not underestimate the power of money and advertising as a way to gain legitimacy as a group and placement within Capitalist society.  
+
+The first lever is pure money -- Corporate involvement in Pride provides the funds needed for organizing and expanding Pride Parades and events (apparently, it becomes pretty expensive when you have a big gathering nowadays. Furthermore, Corporations also donate money to LGBT+ nonprofits and organizations that are responsible for furthering equality agendas. 
+
+Furthmore, advertising for the LGBT community becomes a way for the LGBT community to be present within American life. One practical example of this benefit on an individual level is the effect this has on LGBT community members who live in places where being themselves openly isn’t feasible.  Yes, some corporate involvement in pride or any other type of advertisment may seem inauthentic or pandering. However, if even just one small snippet of two women holding hands at the end of an advertisement helps a sheltered child understand that they’re not alone; then it’s worth it. 
+
+Corporate involvement in Pride and advertising to the LGBT+ community gives the funds, and ultimately, the power, to spread the equality & acceptance movement throughout the world. Of course, as discussed, they don't do this for the better of the world around them, but again to just advertise themselves and take our Pink bucks -- but we should take the victories when we can, right?  
+ 
+Also, interestingly, if one peers at this issue through their Marxist glasses one may argue that by participating in Pride and advertising directly to us, Corporations recognize the LGBT+ community as another faction of the working class to exploit. From the eyes of a class struggle purview-- this recognition is great! This regoniziton puts us right in line with our heteronormative working class counterparts: being exploited like our majority counterparts brings us closer together since now we’re both being taken advantage of. In a way, the problem shifts from a “gay vs straight” narraitive to a working class vs ruling class problem -- it legitimizes a shared struggle that’s bigger than just queer acceptance. 
+
+Corporate involvement in Pride is a lot of fun to poke fun at. But those truly arguing against it are really arguing against a separate, encompassing issue that has a complex workings all of its own. However, Corporate involvement in Pride does have its benefits: and the LGBT community should embrace that for the time being. By embracing the benefits, we can ride on the coattails of one of the most powerful entities in our society to further push our own acceptance and equality agenda. And of course, we can wear cool Pride Apple Watch bands and drink free Absolut from rainbow bottles during out celebrations.
