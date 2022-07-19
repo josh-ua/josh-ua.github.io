@@ -22,9 +22,9 @@ title: 👱‍♂️ josh karper
 
 &nbsp;&nbsp;💳 [Capital One](https://www.capitalone.com/) -- Software Engineer, Fairbank started by a Rich [2019 - 2021]
 
-&nbsp;&nbsp;⚕️ [IdeaCrew](https://ideacrew.com/) -- Software Enginer Intern, govt. contractor [2016 - 2019]
+&nbsp;&nbsp;⚕️ [IdeaCrew](https://ideacrew.com/) -- Software Engineer Intern, govt. contractor [2016 - 2019]
 
-&nbsp;&nbsp;💀 [OpenPoll](https://www.linkedin.com/company/openpoll/) -- Software Enginer, defunct startup [2018]
+&nbsp;&nbsp;💀 [OpenPoll](https://www.linkedin.com/company/openpoll/) -- Software Engineer, defunct startup [2018]
 
 &nbsp;&nbsp;🎓 [University of Maryland, College Park](https://www.umd.edu/) -- Broke Undergrad; got a degree in CS though [2015 - 2019]
 
