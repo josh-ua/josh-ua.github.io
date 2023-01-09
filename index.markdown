@@ -3,11 +3,11 @@
 # To modify the layout, see https://jekyllrb.com/docs/themes/#overriding-theme-defaults
 
 layout: page
-title: 👱‍♂️ josh karper
+title: josh karper
 ---
 
 # 👋 hi
-&nbsp;&nbsp; My name is Josh. This is supposed to be an intro to me and (now) a [platform for my writing](/blog).
+&nbsp;&nbsp; My name is Josh, I work as a software engineer.
 
 &nbsp;&nbsp; Thanks for visiting.
 

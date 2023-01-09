@@ -1,6 +1,6 @@
 ---
 layout: blog
-title: 👱‍♂️ josh karper (blog edition)
+title: josh karper (blog edition)
 permalink: /blog/
 ---
 
