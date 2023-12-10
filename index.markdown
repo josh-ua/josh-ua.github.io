@@ -12,15 +12,15 @@ title: josh karper
 &nbsp;&nbsp; Thanks for visiting.
 
 # 🌐 links
-&nbsp;&nbsp;✍️ [My blog](/blog) -- not boring
 
-&nbsp;&nbsp;📧 [Linkedin](https://www.linkedin.com/in/joshua-karper/) -- contact me here
+&nbsp;&nbsp;📧 [Linkedin](https://www.linkedin.com/in/joshua-karper/) -- contact me here. let me know if you came from here!
 
-# 🔨 work history (tl;dr: software engineer, ~fintech?)
+# 🔨 work history
+&nbsp;&nbsp;💸 [CashApp](https://cash.app/) -- Software Engineer, BNPL *again*; remember when $SQ acquired [AfterPay](https://www.afterpay.com)? [ 2023 - ]
 
-&nbsp;&nbsp;🦸 [Affirm](https://www.affirm.com/) -- Software Engineer, BNPL company started by a Paypal Mafia member [ current ]
+&nbsp;&nbsp;🦸 [Affirm](https://www.affirm.com/) -- Software Engineer, BNPL company started by a Paypal Mafia member [ 2021 - 2023 ]
 
-&nbsp;&nbsp;💳 [Capital One](https://www.capitalone.com/) -- Software Engineer, Fairbank started by a Rich [2019 - 2021]
+&nbsp;&nbsp;💳 [Capital One](https://www.capitalone.com/) -- Software Engineer, Fair bank started by a guy named Rich [2019 - 2021]
 
 &nbsp;&nbsp;⚕️ [IdeaCrew](https://ideacrew.com/) -- Software Engineer Intern, govt. contractor [2016 - 2019]
 
