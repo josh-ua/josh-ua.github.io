@@ -1,0 +1,171 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 680" width="900" height="680" font-family="'Segoe UI', Arial, sans-serif">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0f1117;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1a1d2e;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="orchGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#6c3fc5;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#4a2d8a;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="agent1Grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a6fb5;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0d4a80;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="agent2Grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a8a5a;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0d5c3a;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="agent3Grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#b85c1a;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#7a3d0d;stop-opacity:1" />
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="shadow">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#000000" flood-opacity="0.4"/>
+    </filter>
+    <marker id="arrowBlue" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#4a9edd"/>
+    </marker>
+    <marker id="arrowGreen" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#2dd68a"/>
+    </marker>
+    <marker id="arrowOrange" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#e07a30"/>
+    </marker>
+    <marker id="arrowPurple" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#a07ae0"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="900" height="680" fill="url(#bgGrad)" rx="12"/>
+
+  <!-- Title -->
+  <text x="450" y="40" text-anchor="middle" fill="#ffffff" font-size="20" font-weight="700" letter-spacing="1">Agentic Architecture</text>
+  <line x1="120" y1="52" x2="780" y2="52" stroke="#ffffff" stroke-opacity="0.1" stroke-width="1"/>
+
+  <!-- ===================== AGENT 04 ORCHESTRATOR ===================== -->
+  <rect x="300" y="68" width="300" height="88" rx="10" fill="url(#orchGrad)" filter="url(#shadow)"/>
+  <rect x="300" y="68" width="300" height="88" rx="10" fill="none" stroke="#9f7ae8" stroke-width="1.5"/>
+  <text x="450" y="98" text-anchor="middle" fill="#d4b8ff" font-size="10" font-weight="600" letter-spacing="2">AGENT 04 · ORCHESTRATOR</text>
+  <text x="450" y="122" text-anchor="middle" fill="#ffffff" font-size="13" font-weight="700">Orchestrator &amp; Analyzer</text>
+
+  <!-- Arrow: Agent 04 → Agent 01 -->
+  <line x1="450" y1="156" x2="450" y2="196" stroke="#4a9edd" stroke-width="2" stroke-dasharray="5,3" marker-end="url(#arrowBlue)"/>
+  <rect x="360" y="166" width="80" height="18" rx="4" fill="#0d1620" fill-opacity="0.8"/>
+  <text x="400" y="179" text-anchor="middle" fill="#4a9edd" font-size="9">trigger + date range</text>
+
+  <!-- ===================== AGENT 01 ===================== -->
+  <rect x="300" y="196" width="300" height="82" rx="10" fill="url(#agent1Grad)" filter="url(#shadow)"/>
+  <rect x="300" y="196" width="300" height="82" rx="10" fill="none" stroke="#4a9edd" stroke-width="1.5"/>
+  <text x="450" y="224" text-anchor="middle" fill="#90c8f5" font-size="10" font-weight="600" letter-spacing="2">AGENT 01 · FETCHER</text>
+  <text x="450" y="248" text-anchor="middle" fill="#ffffff" font-size="13" font-weight="700">Earnings Markets Fetcher</text>
+
+  <!-- Divider label: Fan-out -->
+  <line x1="120" y1="310" x2="780" y2="310" stroke="#ffffff" stroke-opacity="0.07" stroke-width="1" stroke-dasharray="4,6"/>
+  <rect x="370" y="300" width="120" height="20" rx="10" fill="#2a1e4a"/>
+  <text x="430" y="314" text-anchor="middle" fill="#9f7ae8" font-size="9" font-weight="600" letter-spacing="1.5">CONCURRENT SPAWN</text>
+
+  <!-- Fan-out lines from Agent 01 to three Agent 02 instances -->
+  <!-- Center line down -->
+  <line x1="450" y1="278" x2="450" y2="296" stroke="#4a9edd" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <!-- Horizontal spread -->
+  <line x1="175" y1="320" x2="725" y2="320" stroke="#2dd68a" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <!-- Verticals down to agent 02 boxes -->
+  <line x1="175" y1="320" x2="175" y2="358" stroke="#2dd68a" stroke-width="1.5" marker-end="url(#arrowGreen)"/>
+  <line x1="450" y1="320" x2="450" y2="358" stroke="#2dd68a" stroke-width="1.5" marker-end="url(#arrowGreen)"/>
+  <line x1="725" y1="320" x2="725" y2="358" stroke="#2dd68a" stroke-width="1.5" marker-end="url(#arrowGreen)"/>
+
+  <!-- market data labels on fan-out arrows -->
+  <rect x="80" y="326" width="66" height="16" rx="4" fill="#0a1a10" fill-opacity="0.85"/>
+  <text x="113" y="338" text-anchor="middle" fill="#2dd68a" font-size="8.5">market data</text>
+  <rect x="358" y="326" width="66" height="16" rx="4" fill="#0a1a10" fill-opacity="0.85"/>
+  <text x="391" y="338" text-anchor="middle" fill="#2dd68a" font-size="8.5">market data</text>
+  <rect x="633" y="326" width="66" height="16" rx="4" fill="#0a1a10" fill-opacity="0.85"/>
+  <text x="666" y="338" text-anchor="middle" fill="#2dd68a" font-size="8.5">market data</text>
+
+  <!-- ===================== THREE AGENT 02 INSTANCES ===================== -->
+  <!-- Agent 02 - Instance 1 -->
+  <rect x="88" y="358" width="175" height="86" rx="10" fill="url(#agent2Grad)" filter="url(#shadow)"/>
+  <rect x="88" y="358" width="175" height="86" rx="10" fill="none" stroke="#2dd68a" stroke-width="1.5"/>
+  <text x="175" y="387" text-anchor="middle" fill="#80e8b8" font-size="9" font-weight="600" letter-spacing="1.5">AGENT 02 · INSTANCE 1</text>
+  <text x="175" y="411" text-anchor="middle" fill="#ffffff" font-size="11" font-weight="700">Price History Fetcher</text>
+  <text x="175" y="430" text-anchor="middle" fill="#60c898" font-size="8" font-style="italic">"Will Airbnb (ABNB) beat quarterly earnings?" </text>
+
+  <!-- Agent 02 - Instance 2 -->
+  <rect x="362" y="358" width="175" height="86" rx="10" fill="url(#agent2Grad)" filter="url(#shadow)"/>
+  <rect x="362" y="358" width="175" height="86" rx="10" fill="none" stroke="#2dd68a" stroke-width="1.5"/>
+  <text x="450" y="387" text-anchor="middle" fill="#80e8b8" font-size="9" font-weight="600" letter-spacing="1.5">AGENT 02 · INSTANCE 2</text>
+  <text x="450" y="411" text-anchor="middle" fill="#ffffff" font-size="11" font-weight="700">Price History Fetcher</text>
+  <text x="450" y="430" text-anchor="middle" fill="#60c898" font-size="8" font-style="italic">"Will Dropbox (DBX) beat quarterly earnings?"</text>
+
+  <!-- Agent 02 - Instance 3 -->
+  <rect x="637" y="358" width="175" height="86" rx="10" fill="url(#agent2Grad)" filter="url(#shadow)"/>
+  <rect x="637" y="358" width="175" height="86" rx="10" fill="none" stroke="#2dd68a" stroke-width="1.5"/>
+  <text x="724" y="387" text-anchor="middle" fill="#80e8b8" font-size="9" font-weight="600" letter-spacing="1.5">AGENT 02 · INSTANCE 3</text>
+  <text x="724" y="411" text-anchor="middle" fill="#ffffff" font-size="11" font-weight="700">Price History Fetcher</text>
+  <text x="724" y="430" text-anchor="middle" fill="#60c898" font-size="8" font-style="italic">"Will Chegg (CHGG) beat quarterly earnings?"</text>
+
+  <!-- Arrows: Agent 02 → Agent 03 (time-series data) -->
+  <line x1="175" y1="444" x2="175" y2="482" stroke="#e07a30" stroke-width="1.5" marker-end="url(#arrowOrange)"/>
+  <line x1="450" y1="444" x2="450" y2="482" stroke="#e07a30" stroke-width="1.5" marker-end="url(#arrowOrange)"/>
+  <line x1="725" y1="444" x2="725" y2="482" stroke="#e07a30" stroke-width="1.5" marker-end="url(#arrowOrange)"/>
+
+  <rect x="113" y="452" width="68" height="16" rx="4" fill="#1a0e00" fill-opacity="0.85"/>
+  <text x="147" y="464" text-anchor="middle" fill="#e07a30" font-size="8.5">time-series</text>
+  <rect x="386" y="452" width="68" height="16" rx="4" fill="#1a0e00" fill-opacity="0.85"/>
+  <text x="420" y="464" text-anchor="middle" fill="#e07a30" font-size="8.5">time-series</text>
+  <rect x="661" y="452" width="68" height="16" rx="4" fill="#1a0e00" fill-opacity="0.85"/>
+  <text x="695" y="464" text-anchor="middle" fill="#e07a30" font-size="8.5">time-series</text>
+
+  <!-- ===================== THREE AGENT 03 INSTANCES ===================== -->
+  <!-- Agent 03 - Instance 1 -->
+  <rect x="88" y="482" width="175" height="86" rx="10" fill="url(#agent3Grad)" filter="url(#shadow)"/>
+  <rect x="88" y="482" width="175" height="86" rx="10" fill="none" stroke="#e07a30" stroke-width="1.5"/>
+  <text x="175" y="511" text-anchor="middle" fill="#f5b880" font-size="9" font-weight="600" letter-spacing="1.5">AGENT 03 · INSTANCE 1</text>
+  <text x="175" y="535" text-anchor="middle" fill="#ffffff" font-size="11" font-weight="700">Market History Analyzer</text>
+  <text x="175" y="554" text-anchor="middle" fill="#e09050" font-size="8" font-style="italic">"Will Airbnb (ABNB) beat quarterly earnings?"</text>
+
+  <!-- Agent 03 - Instance 2 -->
+  <rect x="362" y="482" width="175" height="86" rx="10" fill="url(#agent3Grad)" filter="url(#shadow)"/>
+  <rect x="362" y="482" width="175" height="86" rx="10" fill="none" stroke="#e07a30" stroke-width="1.5"/>
+  <text x="450" y="511" text-anchor="middle" fill="#f5b880" font-size="9" font-weight="600" letter-spacing="1.5">AGENT 03 · INSTANCE 2</text>
+  <text x="450" y="535" text-anchor="middle" fill="#ffffff" font-size="11" font-weight="700">Market History Analyzer</text>
+  <text x="450" y="554" text-anchor="middle" fill="#e09050" font-size="8" font-style="italic">"Will Dropbox (DBX) beat quarterly earnings?"</text>
+
+  <!-- Agent 03 - Instance 3 -->
+  <rect x="637" y="482" width="175" height="86" rx="10" fill="url(#agent3Grad)" filter="url(#shadow)"/>
+  <rect x="637" y="482" width="175" height="86" rx="10" fill="none" stroke="#e07a30" stroke-width="1.5"/>
+  <text x="724" y="511" text-anchor="middle" fill="#f5b880" font-size="9" font-weight="600" letter-spacing="1.5">AGENT 03 · INSTANCE 3</text>
+  <text x="724" y="535" text-anchor="middle" fill="#ffffff" font-size="11" font-weight="700">Market History Analyzer</text>
+  <text x="724" y="554" text-anchor="middle" fill="#e09050" font-size="8" font-style="italic">"Will Chegg (CHGG) beat quarterly earnings?"</text>
+
+  <!-- Fan-in: Agent 03s → Agent 04 (analytics results) -->
+  <!-- Verticals up from bottom of frame -->
+  <line x1="175" y1="568" x2="175" y2="600" stroke="#a07ae0" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <line x1="450" y1="568" x2="450" y2="600" stroke="#a07ae0" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <line x1="725" y1="568" x2="725" y2="600" stroke="#a07ae0" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <!-- Horizontal gather -->
+  <line x1="175" y1="600" x2="725" y2="600" stroke="#a07ae0" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <!-- Up to orchestrator (going off bottom and looping label) -->
+  <line x1="450" y1="600" x2="450" y2="620" stroke="#a07ae0" stroke-width="2" stroke-dasharray="4,3"/>
+  <!-- Arrow points up into a label box -->
+  <rect x="318" y="610" width="264" height="30" rx="8" fill="#2a1e4a" stroke="#9f7ae8" stroke-width="1"/>
+  <text x="450" y="629" text-anchor="middle" fill="#c4a8f8" font-size="9.5" font-weight="600">📊 analytics results aggregated → Agent 04</text>
+
+  <!-- Legend -->
+  <rect x="24" y="604" width="210" height="70" rx="8" fill="#0d1117" stroke="#ffffff" stroke-opacity="0.1" stroke-width="1"/>
+  <text x="129" y="619" text-anchor="middle" fill="#888" font-size="9" font-weight="600" letter-spacing="1">DATA FLOW</text>
+  <line x1="34" y1="630" x2="54" y2="630" stroke="#4a9edd" stroke-width="2" stroke-dasharray="4,3"/>
+  <text x="62" y="630" fill="#aaa" font-size="8.5" dominant-baseline="middle">Trigger / Instruction</text>
+  <line x1="34" y1="644" x2="54" y2="644" stroke="#2dd68a" stroke-width="2" stroke-dasharray="4,3"/>
+  <text x="62" y="644" fill="#aaa" font-size="8.5" dominant-baseline="middle">Market Data</text>
+  <line x1="34" y1="658" x2="54" y2="658" stroke="#e07a30" stroke-width="2" stroke-dasharray="4,3"/>
+  <text x="62" y="658" fill="#aaa" font-size="8.5" dominant-baseline="middle">Time-Series Data</text>
+  <line x1="34" y1="668" x2="54" y2="668" stroke="#a07ae0" stroke-width="2" stroke-dasharray="4,3"/>
+  <text x="62" y="668" fill="#aaa" font-size="8.5" dominant-baseline="middle">Analytics Results</text>
+</svg>
