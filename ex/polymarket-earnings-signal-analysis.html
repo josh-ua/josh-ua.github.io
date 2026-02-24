@@ -221,45 +221,18 @@
 
     .callout strong { color: var(--accent); }
 
-    /* ── Analysis writeup ── */
-    .analysis-writeup {
-      margin: 2rem 0;
-      padding: 1.35rem 1.5rem;
-      border-radius: 8px;
-      border: 1px solid var(--border);
-      border-left: 2px solid var(--accent);
-      background: linear-gradient(135deg, rgba(16, 19, 24, 0.96), rgba(10, 12, 16, 0.98));
-      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.01);
-    }
-
-    .analysis-writeup::before {
-      content: 'Analysis Writeup';
-      display: block;
-      font-family: var(--mono);
-      font-size: 0.62rem;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 0.75rem;
-    }
-
-    .analysis-writeup p {
+    .full-writeup p {
       color: #c6ccd8;
       margin-bottom: 0.9rem;
+      line-height: 1.6;
     }
 
-    .analysis-writeup p + p {
-      margin-top: 0.85rem;
-      padding-top: 0.85rem;
-      border-top: 1px dashed var(--border);
-    }
-
-    .analysis-writeup strong {
+    .full-writeup strong {
       color: var(--accent);
       font-weight: 500;
     }
 
-    .analysis-writeup code {
+    .full-writeup code {
       background: #101318;
       border: 1px solid var(--border);
       border-radius: 3px;
@@ -267,6 +240,96 @@
       font-family: var(--mono);
       font-size: 0.75rem;
       color: #e6e9f2;
+    }
+
+    .full-writeup .subheading {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin: 1rem 0 0.45rem;
+      padding: 0.2rem 0.6rem;
+      border-radius: 4px;
+      background: rgba(12, 14, 18, 0.7);
+      font-size: 0.88rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      color: #e6e9f2;
+    }
+
+    .full-writeup .subheading::before {
+      content: '→';
+      font-family: var(--mono);
+      color: var(--accent);
+      font-size: 0.9rem;
+    }
+
+    .full-writeup .subheading:first-child {
+      margin-top: 0;
+    }
+
+    .full-writeup .subheading-lg {
+      display: block;
+      align-items: center;
+      gap: 0.6rem;
+      margin: 0 0 0.75rem;
+      padding: 0.25rem 0.7rem 0.25rem 0.65rem;
+      border-radius: 6px;
+      background: linear-gradient(90deg, rgba(19, 22, 28, 0.95), rgba(12, 14, 18, 0.35));
+      font-size: 1.05rem;
+      font-weight: 650;
+      letter-spacing: 0.03em;
+      color: #f0f3f9;
+      text-transform: uppercase;
+    }
+
+    .full-writeup .subheading-lg::before {
+      content: '';
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      margin-right: 0.5rem;
+      border: 2px solid var(--accent);
+      border-radius: 999px;
+      vertical-align: middle;
+    }
+
+    .full-writeup .subheading-lg::after {
+      content: '';
+      display: block;
+      height: 1px;
+      margin-top: 0.6rem;
+      background: linear-gradient(90deg, rgba(80, 86, 98, 0.7), rgba(80, 86, 98, 0));
+    }
+
+    .window-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 0.45rem;
+      margin: 0.65rem 0 0.35rem;
+    }
+
+    .window-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      padding: 0.55rem 0.75rem;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: #0f1218;
+      color: #d7dde8;
+      font-size: 0.82rem;
+    }
+
+    .window-card strong {
+      font-weight: 600;
+      color: #e6e9f2;
+      letter-spacing: 0.01em;
+    }
+
+    .window-card code {
+      font-size: 0.72rem;
+      padding: 0.08rem 0.3rem;
     }
 
     /* ── Chart area ── */
@@ -407,9 +470,10 @@
       line-height: 1;
     }
 
-    .acc-value.below { color: var(--red); }
-    .acc-value.at    { color: var(--muted); }
-    .acc-value.above { color: var(--green); }
+    .acc-value.below    { color: var(--red); }
+    .acc-value.at       { color: var(--muted); }
+    .acc-value.above    { color: var(--green); }
+    .acc-value.baseline { color: var(--accent); }
 
     .acc-label {
       font-size: 0.7rem;
@@ -620,51 +684,40 @@
 
   <!-- ── 04 Findings ── -->
   <section>
-    <h2><span class="section-num">04</span> What I Found</h2>
-    <div class="run-snapshot">
-      <div class="run-card">
-        <div class="run-label">Baseline Odds</div>
-        <div class="run-value">66%</div>
-        <div class="run-note">If we said yes to every market, we'd be correct 66% of the time.</div>
-      </div>
-      <div class="run-card">
-        <div class="run-label">Total Markets Analyzed</div>
-        <div class="run-value">60</div>
-        <div class="run-note">"Will <Company> beat quarterly earnings?" markets</div>
-      </div>
-    </div>
-    <div class="chart-wrap">
-      <div class="chart-title">Calibration Curve — 1h Window Ending at Selected Offset</div>
-      <div class="calibration-controls">
-        <label for="calibrationWindowSelect">End offset (hours before resolution)</label>
-        <select id="calibrationWindowSelect"></select>
-      </div>
-      <div id="calibrationChart" class="calibration-chart"></div>
-      <div id="calibrationTooltip" class="calibration-tooltip"></div>
-      <div class="calibration-details">
-        <div class="calibration-meta" id="calibrationBucketMeta">Select a bucket to inspect the underlying markets.</div>
-        <table class="calibration-table">
-          <thead>
-            <tr>
-              <th>Ticker</th>
-              <th>Company</th>
-              <th>Outcome</th>
-              <th>Avg Pred</th>
-            </tr>
-          </thead>
-          <tbody id="calibrationBucketTable"></tbody>
-        </table>
-      </div>
-    </div>
+    <h2><span class="section-num">04</span> Analysis Writeup</h2>
 
-    <div class="analysis-writeup">
-      <p><strong>What the data says (ex. final 3 hours):</strong> When I cut out the last three hours before each market resolves, the short-horizon edge mostly vanishes. Baseline accuracy (always say YES) is 66.1%. Against that: 1h direction is 58.8% (below baseline), 6h is 60.3% (below), 1d is 67.2% (basically baseline), and 3–7d drifts are ~72.4–72.6% (modestly above). Translation: the strong signal in the raw runs lived in the final hours.</p>
-      <p><strong>How “directional accuracy” is calculated:</strong> pick a window, compute the YES price change <code>return = price_end − price_start</code>. If it’s positive, that’s a YES/beat prediction; if negative, a NO/miss. Then accuracy is <code>correct / total</code>, skipping windows with no movement.</p>
-      <p><strong>Exact windows (3h exclusion):</strong> Let <code>T</code> be resolution time. All windows end at <code>T − 3h</code>. So: 1h = [T−4h, T−3h], 6h = [T−9h, T−3h], 1d = [T−27h, T−3h], 3d = [T−75h, T−3h], 7d = [T−171h, T−3h]. This forces the test to ignore the last-hour convergence.</p>
+    <div class="full-writeup">
+        <h3 class="subheading-lg">Directional Drift - Original Hypothesis</h3>
+        <h4 class="subheading">Baseline calculation</h4>
+        <p>The baseline is a naive strategy: always predict YES (the company will beat earnings). Out of the 62 markets analyzed, 41 resolved YES — giving a baseline accuracy of <code>41 / 62 = 66.1%</code>. Any signal we test needs to beat this to be useful.</p>
+        <h4 class="subheading">Analysis Windows</h4>
+        <p>Let <code>T</code> be the market resolution time. All analysis windows end at <code>T − 3h</code>. So:</p>
+        <div class="window-grid" aria-label="Exact windows">
+          <div class="window-card"><strong>1h</strong><code>[T−4h, T−3h]</code></div>
+          <div class="window-card"><strong>6h</strong><code>[T−9h, T−3h]</code></div>
+          <div class="window-card"><strong>1d</strong><code>[T−27h, T−3h]</code></div>
+          <div class="window-card"><strong>3d</strong><code>[T−75h, T−3h]</code></div>
+          <div class="window-card"><strong>7d</strong><code>[T−171h, T−3h]</code></div>
+         </div>
+             <div class="callout">
+      <strong>Why <code>T - 3?</code>:</strong> The resolution time for the prediction markets and the time when the respective companies release their earnings information usually do not line up. As a result, there’s typically a small window in which the odds converge to the “winning” bet before Polymarket resolves the market. Therefore, we exclude the last 3 hours of market data in this analysis to prevent that from biasing our analysis. 
     </div>
+         <h4 class="subheading">How “directional accuracy” is calculated</h4>
+         <p>Pick a window, compute the YES price change based on the start and end in the window: <code>return = price_end − price_start</code>. </p>
+          
+         <p>If it’s positive, that’s a YES/beat prediction; if negative, a NO/miss. </p>
+          
+          <p>Then accuracy is <code>correct / total</code>, skipping windows with no movement.</p>
+         <h4 class="subheading">Results after analyzing 62 markets</h4>
+        </div>
 
     <!-- Accuracy stat grid -->
     <div class="accuracy-grid">
+      <div class="acc-cell">
+        <span class="acc-window">Baseline</span>
+        <span class="acc-value baseline">66.1%</span>
+        <span class="acc-label">always predict YES</span>
+      </div>
       <div class="acc-cell">
         <span class="acc-window">1h window</span>
         <span class="acc-value below">58.8%</span>
@@ -687,22 +740,66 @@
       </div>
     </div>
 
-    <!-- Chart placeholder: accuracy vs baseline bar chart -->
+    <!-- Chart: accuracy vs baseline bar chart -->
     <div class="chart-wrap">
-      <div class="chart-title">Directional Accuracy by Window — ex. Final 3hrs (N≈40)</div>
+      <div class="chart-title">Directional Accuracy by Window — ex. Final 3hrs (N≈62)</div>
       <canvas id="accuracyChart" height="220"></canvas>
     </div>
+
+    <div class="full-writeup">
+
+      <h3 class="subheading-lg">Bucket Analysis</h3>
+        <h4 class="subheading">Original Hypothesis</h4>
+        <p>New angle: is there a correlation between a prediction market’s odds at fixed time points before resolution — specifically 1, 3, 6, 12, and 24 hours before — and the eventual outcome?</p>
+
+        <p>In other words, can we determine whether markets with a YES probability above some threshold N at those time points reliably resolve YES?></p>
+        <h4 class="subheading">Refinded setup</h4>
+       <p>For each market, take the YES probability during that hour, bucket it into 10% bands (0–10, 10–20, …, 90–100), and then compute the actual resolution rate in each bucket (how often it resolved YES vs NO).</p>
+
+      <p> Goal: see whether a “high” YES probability in that pre-resolution hour is actually predictive/accurate.</p>
+     
+     <h4 class="subheading">Data results</h4>
+
+      <div class="chart-wrap">
+      <div class="chart-title">Calibration Curve — 1h Window Ending at Selected Offset</div>
+      <div class="calibration-controls">
+        <label for="calibrationWindowSelect">End offset (hours before resolution)</label>
+        <select id="calibrationWindowSelect"></select>
+      </div>
+      <div id="calibrationChart" class="calibration-chart"></div>
+      <div id="calibrationTooltip" class="calibration-tooltip"></div>
+      <div class="calibration-details">
+        <div class="calibration-meta" id="calibrationBucketMeta">Select a bucket to inspect the underlying markets.</div>
+        <table class="calibration-table">
+          <thead>
+            <tr>
+              <th>Ticker</th>
+              <th>Company</th>
+              <th>Outcome</th>
+              <th>Avg Pred</th>
+            </tr>
+          </thead>
+          <tbody id="calibrationBucketTable"></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="callout">
+      <strong>YES/NO Clarification:</strong> <code>BEAT</code> is synonymous with the company beating earings and the market resolving to <code>YES</code>. <code>MISS</code> is the inverse with the market resolving to <code>NO</code>.
+    </div>
+      <p>Based on the charted data above, there seems to be a high correlation between a very high prediction market odds and a company beatin it's earnings.</p>
+      <p> Interestingly, at <strong>6, 12, and 24 hours</strong> before resolution, <strong>markets with YES odds of 90% or higher appear to reliably resolve to <code>YES</code></strong>. In the chart above, the pink dots represent groups of markets that resolved <code>YES</code> 100% of the time.</p>
+
+        </div>
   </section>
 
-  <!-- ── 04 Next ── -->
+  <!-- ── 05 Next ── -->
   <section>
-    <h2><span class="section-num">04</span> What I'd Do Next</h2>
-    <p>The N is small (40 markets, one week). Before drawing any firm conclusions:</p>
+    <h2><span class="section-num">05</span> Overall Takeaways and Next Steps</h2>
+    <p>The N is small (60 markets, 10 days). Before drawing any firm conclusions:</p>
     <ul class="next-list">
-      <li>Expand the dataset over a longer time window to see if the 3–7 day signal is real or noise</li>
+      <li>Expand the dataset over a longer time window to see if the 3–7 day signal and the bucket signal is real or noise</li>
       <li>Define "sharp move" more rigorously — thresholding by magnitude, not just direction</li>
-      <li>Test whether the final-hours signal is consistent enough to be useful in a latency-insensitive context</li>
-      <li>Ask the product question: if a signal does exist, who is it useful for and in what form?</li>
+      <li>Fine tune model usage - used a frontier model for most of these things which was costly. Could be made cheaper.</li>
     </ul>
     <p>On this dataset, with this methodology, the honest answer is: probably not an edge. And knowing that quickly — in a morning, before spending weeks on it — is exactly what a prototype is for.</p>
   </section>
