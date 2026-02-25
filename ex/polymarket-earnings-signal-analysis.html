@@ -593,11 +593,11 @@
   <!-- ── 01 Hypothesis ── -->
   <section>
     <h2><span class="section-num">01</span> The Hypothesis</h2>
-    <p>Polymarket is a prediction market platform where traders can gamble on real life events.  Part of the current zeitgeist amongst self-identified expert prediction traders is finding alpha: an "edge."  A lot of these are non-scalable arbitrage opportunities or seem to be straight up insider trading (granted, my internet lawyers are saying <a href="https://www.corporatecomplianceinsights.com/prediction-markets-sports-betting-insider-trading/">it's not real insider trading</a>). </p>
+    <p>Polymarket is a prediction market platform where traders can gamble on real-life events.  Part of the current zeitgeist amongst self-identified expert prediction traders is finding alpha: an "edge."  A lot of these are non-scalable arbitrage opportunities or seem to be straight up insider trading (granted, my internet lawyers are saying <a href="https://www.corporatecomplianceinsights.com/prediction-markets-sports-betting-insider-trading/">it's not real insider trading</a>). </p>
       
     <p>Unfortunately, everyone and their mother are searching for arbitrage opportunities and as a result they are hard to come by and quickly filled, or met with little liquidity to take advantage of. I also can’t seem to find myself in the rooms where government military actions are being decided, so I decided to see if there were any other edges we could explore. </p>
 
-    <p>Hidden among the prediction markets for looming military actions and religious figures remerging, there exists a subset of markets that in comparison seem a little more traditional: betting YES or NO on whether publicly traded companies will beat their earnings estimates. For example, <a href=https://polymarket.com/event/pypl-quarterly-earnings-nongaap-eps-02-03-2026-1pt29>will PayPal (PYPL) beat quarterly earnings?</a> Since Paypal reported below analyst's estimations for their quarterly earnings on February 3rd, 2026, the market resolved to NO. </p>
+    <p>Hidden among the prediction markets for looming military actions and religious figures re-emerging, there exists a subset of markets that in comparison seem a little more traditional: betting YES or NO on whether publicly traded companies will beat their earnings estimates. For example, <a href=https://polymarket.com/event/pypl-quarterly-earnings-nongaap-eps-02-03-2026-1pt29>will PayPal (PYPL) beat quarterly earnings?</a> Since Paypal reported below analyst's estimations for their quarterly earnings on February 3rd, 2026, the market resolved to NO. </p>
       
     <p>At first glance, the aggregate odds don't seem useful as a signal - even in the example above, it seems at face value Polymarket traders are fairly optimistic. I wanted to put that to the test: was there any actual signal from Polymarket in which a company would beat their estimated earnings? </p>
     
@@ -610,16 +610,16 @@
     <p>I'm an engineer by trade, so the problem decomposed naturally into a pipeline: fetch the markets, pull their full price history, and run analysis across all of them. The non-trivial part was doing it fast enough to test this idea the same morning I had it. Enter: AI.</p>
 
     <p>I used ChatGPT Codex as the primary building tool, originally 
-    treating it as an co-pilot agent that could read Polymarket's API documentation and figure out implementation details I didn't want to spend time on manually (for example, undocumented behaviors like how far back the historical data actually goes).</p>
+    treating it as a co-pilot agent that could read Polymarket's API documentation and figure out implementation details I didn't want to spend time on manually (for example, undocumented behaviors like how far back the historical data actually goes).</p>
 
-    <p>Once Codex figured out how to effectivly fetch the data, the next part was implementing an agent arichecture to execute the pipeline mentioned above. After riffing a bit with Codex, I was able to easily create agents that can handle each of the steps. In the end, a I  constructued a multi-tiered agent architecture to fetch all of the data and test this hypothesis.</p>
+    <p>Once Codex figured out how to effectively fetch the data, the next part was implementing an agent architecture to execute the pipeline mentioned above. After riffing a bit with Codex, I was able to easily create agents that can handle each of the steps. In the end, I constructed a multi-tiered agent architecture to fetch all of the data and test this hypothesis.</p>
 
     <div class="pipeline">
       <div class="agent">
         <div class="agent-line"><div class="agent-dot"></div><div class="agent-connector"></div></div>
         <div class="agent-body">
           <div class="agent-label">Agent 01 · Earnings Market Fetcher</div>
-          <div class="agent-desc">Given a date range, query for resolved earnings-specific markets export fidnings for other agents to consume.</div>
+          <div class="agent-desc">Given a date range, query for resolved earnings-specific markets export findings for other agents to consume.</div>
         </div>
       </div>
       <div class="agent">
@@ -633,7 +633,7 @@
         <div class="agent-line"><div class="agent-dot"></div><div class="agent-connector"></div></div>
         <div class="agent-body">
           <div class="agent-label">Agent 03 · Earnings Market History Analyzer</div>
-          <div class="agent-desc">Consume and analyze the output of Agent 02 return deterministic, machine-readable analytics for downstream decisioning.</div>
+          <div class="agent-desc">Consume and analyze the output of Agent 02 and return deterministic, machine-readable analytics for downstream decisioning.</div>
         </div>
       </div>
       <div class="agent">
@@ -652,7 +652,7 @@
 
       <!-- ── 03 Running ── -->
   <section>
-    <h2><span class="section-num">03</span> Running the prototype</h2>
+    <h2><span class="section-num">03</span> Running the Prototype</h2>
 
     <div class="run-snapshot">
       <div class="run-card">
@@ -746,7 +746,7 @@
 
     <!-- Chart: accuracy vs baseline bar chart -->
     <div class="chart-wrap">
-      <div class="chart-title">Directional Accuracy by Window — ex. Final 3hrs (N≈62)</div>
+      <div class="chart-title">Directional Accuracy by Window — excl. Final 3hrs (N≈62)</div>
       <canvas id="accuracyChart" height="220"></canvas>
     </div>
 
@@ -788,7 +788,7 @@
       </div>
     </div>
     <div class="callout">
-      <strong>YES/NO Clarification:</strong> <code>BEAT</code> is synonymous with the company beating earings and the market resolving to <code>YES</code>. <code>MISS</code> is the inverse with the market resolving to <code>NO</code>.
+      <strong>YES/NO Clarification:</strong> <code>BEAT</code> is synonymous with the company beating earnings and the market resolving to <code>YES</code>. <code>MISS</code> is the inverse with the market resolving to <code>NO</code>.
     </div>
       <p>Based on the charted data above, there seems to be a high correlation between a very high prediction market odds and a company beating its earnings.</p>
       <p> Interestingly, at <strong>6, 12, and 24 hours</strong> before resolution, <strong>markets with YES odds of 90% or higher appear to reliably resolve to <code>YES</code></strong>. In the chart above, the pink dots represent groups of markets that resolved <code>YES</code> 100% of the time.</p>
@@ -805,7 +805,28 @@
       <li>Define "sharp move" more rigorously — thresholding by magnitude, not just direction</li>
       <li>Fine tune model usage - I used the latest frontier model for most of these steps which was costly; it could be made cheaper.</li>
     </ul>
-    <p>On this dataset, with this methodology, the honest answer is: probably not an edge. And knowing that quickly — in a morning, before spending a large chunk of time on it — is exactly what a prototyping with AI is great for.</p>
+    <p>On this dataset, with this methodology, the honest answer is: probably not an edge. And knowing that quickly — in a morning, before spending a large chunk of time on it — is exactly what prototyping with AI is great for.</p>
+  </section>
+
+  <!-- ── Appendix ── -->
+  <section>
+    <h2><span class="section-num">A</span> Appendix: More AI Usage Details</h2>
+
+    <figure class="agent-figure">
+      <img src="3hrwindowchange.jpg" alt="Codex exploring market data in multiple formats and views" />
+      <figcaption>Codex used to slice and re-examine the underlying market data across different formats and time representations.</figcaption>
+    </figure>
+
+    <figure class="agent-figure">
+      <img src="bucketcreation.jpg" alt="Codex grouping market data into probability buckets" />
+      <img src="bucketanalysis.jpg" alt="Codex digging into bucket-level statistics and distributions" />
+      <figcaption>Codex used to segment markets into probability buckets and then drill into each group — surfacing distributional patterns that weren't visible in the raw data.</figcaption>
+    </figure>
+
+    <figure class="agent-figure">
+      <img src="creation.jpg" alt="Codex used to build the interactive visualizations in this analysis" />
+      <figcaption>Codex used to generate the interactive data visualizations, charts, and layout components in this writeup.</figcaption>
+    </figure>
   </section>
 
 </main>
