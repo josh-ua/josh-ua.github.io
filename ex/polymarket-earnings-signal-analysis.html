@@ -583,7 +583,7 @@
       <span>ChatGPT Codex</span>
       <span>Polymarket API</span>
       <span>Python</span>
-      <span>60 markets</span>
+      <span>62 markets</span>
     </div>
   </div>
 </header>
@@ -619,14 +619,14 @@
         <div class="agent-line"><div class="agent-dot"></div><div class="agent-connector"></div></div>
         <div class="agent-body">
           <div class="agent-label">Agent 01 · Earnings Market Fetcher</div>
-          <div class="agent-desc">Given a date range, query for resolved earnings-specific markets export findings for other agents to consume.</div>
+          <div class="agent-desc">Given a date range, query for resolved earnings-specific markets and export findings for other agents to consume.</div>
         </div>
       </div>
       <div class="agent">
         <div class="agent-line"><div class="agent-dot"></div><div class="agent-connector"></div></div>
         <div class="agent-body">
           <div class="agent-label">Agent 02 · Price History Fetcher</div>
-          <div class="agent-desc">Consumed the output of Agent 01 and pulled full historical odds data in time-series increments for each individual market.</div>
+          <div class="agent-desc">Consumes the output of Agent 01 and pulled full historical odds data in time-series increments for each individual market.</div>
         </div>
       </div>
        <div class="agent">
@@ -700,7 +700,7 @@
           <div class="window-card"><strong>7d</strong><code>[T−171h, T−3h]</code></div>
          </div>
              <div class="callout">
-      <strong>Why <code>T - 3?</code>:</strong> The resolution time for the prediction markets and the time when the respective companies release their earnings information usually do not line up. As a result, there’s typically a small window in which the odds converge to the “winning” bet before Polymarket resolves the market. Therefore, we exclude the last 3 hours of market data in this analysis to prevent that from biasing our analysis. 
+      <strong>Why <code>T − 3h</code>:</strong> The resolution time for the prediction markets and the time when the respective companies release their earnings information usually do not line up. As a result, there’s typically a small window in which the odds converge to the “winning” bet before Polymarket resolves the market. Including that window would inflate accuracy artificially — the odds have already moved to reflect the known outcome. We exclude the last 3 hours to test whether the market has genuine predictive signal <em>before</em> the answer is known.
     </div>
          <h4 class="subheading">How “directional accuracy” is calculated</h4>
          <p>Pick a window, compute the YES price change based on the start and end in the window: <code>return = price_end − price_start</code>. </p>
@@ -741,7 +741,7 @@
     </div>
 
      <p>
-      From the data above, it seems that there is no useful correlation between sharp market pricing moves prior to the market resolving. 3 and 7 days out there seems to be a slight edge - but not anything notable compared to our easy baseline.
+      From the data above, it seems that there is no useful correlation between sharp market pricing moves and eventual outcome prior to the market resolving. 3 and 7 days out there seems to be a slight edge - but not anything notable compared to our easy baseline.
      </p>
 
     <!-- Chart: accuracy vs baseline bar chart -->
@@ -753,8 +753,8 @@
     <div class="full-writeup">
 
       <h3 class="subheading-lg">Bucket Analysis</h3>
-        <h4 class="subheading">Original Hypothesis</h4>
-        <p>New angle: is there a correlation between a prediction market’s odds at fixed time points before resolution — specifically 1, 3, 6, 12, and 24 hours before — and the eventual outcome?</p>
+        <h4 class="subheading">Hypothesis</h4>
+        <p>A separate question: is the raw <em>level</em> of the odds informative? Specifically, is there a correlation between a prediction market’s YES probability at fixed time points before resolution — 1, 3, 6, 12, and 24 hours out — and the eventual outcome?</p>
 
         <p>In other words, can we determine whether markets with a YES probability above some threshold N at those time points reliably resolve YES?</p>
         <h4 class="subheading">Parameters</h4>
@@ -799,13 +799,13 @@
   <!-- ── 05 Next ── -->
   <section>
     <h2><span class="section-num">05</span> Overall Takeaways and Next Steps</h2>
-    <p>The N is small (60 markets, 10 days). Before drawing any firm conclusions:</p>
+    <p>The N is small (62 markets, 10 days). Before drawing any firm conclusions:</p>
     <ul class="next-list">
       <li>Expand the dataset over a longer time window to see if the 3–7 day signal and the bucket signal is real or noise</li>
       <li>Define "sharp move" more rigorously for the drift — thresholding by magnitude, not just direction</li>
       <li>Fine tune model usage - I used the latest frontier model for most of these steps which was costly; it could be made cheaper</li>
     </ul>
-    <p>On this dataset, with this methodology, there’s no edge in direction drift — but the bucket signal may still hold signal. However, the biggest win here is getting to that answer in a morning, before investing any real time. It’s exactly what AI-assisted prototyping enables.</p>
+    <p>On this dataset, with this methodology, there’s no edge in directional drift — but the bucket signal may be real and worth more investigation. However, the biggest win here is getting to that answer in a morning, before investing any real time. It’s exactly what AI-assisted prototyping enables.</p>
   </section>
 
   <!-- ── Appendix ── -->
