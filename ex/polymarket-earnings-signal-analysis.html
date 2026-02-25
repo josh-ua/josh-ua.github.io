@@ -583,7 +583,7 @@
       <span>ChatGPT Codex</span>
       <span>Polymarket API</span>
       <span>Python</span>
-      <span>42 markets</span>
+      <span>60 markets</span>
     </div>
   </div>
 </header>
@@ -740,6 +740,10 @@
       </div>
     </div>
 
+     <p>
+      From the data above, it seems that there is no useful correlation between sharp market pricing moves prior to the market resolving. 3 and 7 days out there seems to be a slight edge - but not anything notable compared to our easy baseline.
+     </p>
+
     <!-- Chart: accuracy vs baseline bar chart -->
     <div class="chart-wrap">
       <div class="chart-title">Directional Accuracy by Window — ex. Final 3hrs (N≈62)</div>
@@ -752,8 +756,8 @@
         <h4 class="subheading">Original Hypothesis</h4>
         <p>New angle: is there a correlation between a prediction market’s odds at fixed time points before resolution — specifically 1, 3, 6, 12, and 24 hours before — and the eventual outcome?</p>
 
-        <p>In other words, can we determine whether markets with a YES probability above some threshold N at those time points reliably resolve YES?></p>
-        <h4 class="subheading">Refinded setup</h4>
+        <p>In other words, can we determine whether markets with a YES probability above some threshold N at those time points reliably resolve YES?</p>
+        <h4 class="subheading">Parameters</h4>
        <p>For each market, take the YES probability during that hour, bucket it into 10% bands (0–10, 10–20, …, 90–100), and then compute the actual resolution rate in each bucket (how often it resolved YES vs NO).</p>
 
       <p> Goal: see whether a “high” YES probability in that pre-resolution hour is actually predictive/accurate.</p>
@@ -761,7 +765,7 @@
      <h4 class="subheading">Data results</h4>
 
       <div class="chart-wrap">
-      <div class="chart-title">Calibration Curve — 1h Window Ending at Selected Offset</div>
+      <div class="chart-title">Calibration Curve — 1h Window Ending at Selected Offset (inclusive of T - 3H)</div>
       <div class="calibration-controls">
         <label for="calibrationWindowSelect">End offset (hours before resolution)</label>
         <select id="calibrationWindowSelect"></select>
@@ -786,7 +790,7 @@
     <div class="callout">
       <strong>YES/NO Clarification:</strong> <code>BEAT</code> is synonymous with the company beating earings and the market resolving to <code>YES</code>. <code>MISS</code> is the inverse with the market resolving to <code>NO</code>.
     </div>
-      <p>Based on the charted data above, there seems to be a high correlation between a very high prediction market odds and a company beatin it's earnings.</p>
+      <p>Based on the charted data above, there seems to be a high correlation between a very high prediction market odds and a company beating its earnings.</p>
       <p> Interestingly, at <strong>6, 12, and 24 hours</strong> before resolution, <strong>markets with YES odds of 90% or higher appear to reliably resolve to <code>YES</code></strong>. In the chart above, the pink dots represent groups of markets that resolved <code>YES</code> 100% of the time.</p>
 
         </div>
@@ -799,9 +803,9 @@
     <ul class="next-list">
       <li>Expand the dataset over a longer time window to see if the 3–7 day signal and the bucket signal is real or noise</li>
       <li>Define "sharp move" more rigorously — thresholding by magnitude, not just direction</li>
-      <li>Fine tune model usage - used a frontier model for most of these things which was costly. Could be made cheaper.</li>
+      <li>Fine tune model usage - I used the latest frontier model for most of these steps which was costly; it could be made cheaper.</li>
     </ul>
-    <p>On this dataset, with this methodology, the honest answer is: probably not an edge. And knowing that quickly — in a morning, before spending weeks on it — is exactly what a prototype is for.</p>
+    <p>On this dataset, with this methodology, the honest answer is: probably not an edge. And knowing that quickly — in a morning, before spending a large chunk of time on it — is exactly what a prototyping with AI is great for.</p>
   </section>
 
 </main>
