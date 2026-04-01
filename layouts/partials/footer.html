@@ -1,0 +1,9 @@
+{{ if site.Params.theme_config.isShowFooter }}
+    {{ $footerContent := readFile "layouts/footer.md" }}
+    {{ if and $footerContent (ne $footerContent "") }}
+        <footer style="text-align:center;">
+            <hr/>
+            {{ $footerContent | markdownify }}
+        </footer>
+    {{ end }}
+{{ end }}

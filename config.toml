@@ -1,0 +1,5 @@
+baseURL = 'https://josh-ua.github.io/'
+theme = 'nostyleplease'
+
+[params.theme_config]
+  isShowFooter = true

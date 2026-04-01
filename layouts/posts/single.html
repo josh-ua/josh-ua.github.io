@@ -1,0 +1,22 @@
+{{ define "main" }}
+{{ partial "back_link.html" .}}
+
+<article>
+    <p style="text-align:right;">
+        <time datetime="{{ .Date }}">
+            {{ .Date.Format "01-02-2006" }}
+        </time>
+    </p>
+
+    <h1>{{ .Title }}</h1>
+
+    {{ if .Params.toc }}
+        <aside {{ if .Params.tocBorder }} class="toc" {{ end }}>
+            {{ .TableOfContents }}
+        </aside>
+    {{ end }}
+
+    {{ .Content }}
+</article>
+<a href="javascript:history.back()">&larr; back</a>
+{{ end }}
