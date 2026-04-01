@@ -1,4 +1,4 @@
-baseURL = 'https://josh-ua.github.io/'
+baseURL = 'https://josh.dk/'
 theme = 'nostyleplease'
 
 [params.theme_config]
