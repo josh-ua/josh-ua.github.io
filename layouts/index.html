@@ -1,0 +1,23 @@
+{{ define "main" }}
+
+<div style="text-align:center;">
+<header>
+    <div class="josh-name-wrapper"><a href="{{ "" | relURL }}" style="text-decoration:none;color:inherit"><h1 class="josh-name">Josh Karper</h1></a></div>
+    {{- if $.Site.Params.theme_config.show_description -}}
+        <p>{{ $.Site.Params.description }}</p>
+    {{- end -}}
+</header>
+{{ .Content }}
+
+posts
+<table style="margin:0 auto;border-collapse:collapse;border:none;">
+  {{ range (where .Site.RegularPages "Section" "posts").ByDate.Reverse }}
+  <tr>
+    <td style="text-align:right;padding:0.4em 1em 0.4em 0;font-weight:normal;white-space:nowrap;border:none;">{{ .Date.Format "01-02-2006" }}</td>
+    <td style="text-align:left;padding:0.4em 0;border:none;"><a href="{{ .RelPermalink }}">{{ .Title }}</a></td>
+  </tr>
+  {{ end }}
+</table>
+</div>
+
+{{ end }}

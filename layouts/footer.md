@@ -1,0 +1,1 @@
+[LinkedIn](https://www.linkedin.com/in/joshua-karper/) | [GitHub](https://github.com/josh-ua) | [firstname].[lastname] at gmail
