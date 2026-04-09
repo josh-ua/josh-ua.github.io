@@ -1,0 +1,44 @@
+---
+draft: false
+title: "'live your truth'"
+date: 2026-04-05T00:00:00+08:00
+---
+1/3 of the way through *The Gay Science*[^1] and Nietzsche finally starts to get to the meaty stuff. After a lot of - in my 
+opinion - garrulous banter and the occasional interesting thought, in passage 108, he begins to define and plant the seeds for the claims he is most known for. The man proceeds to hit us with the classic "God is dead" (108) and then declares that there really is no divine order in the world. He warns readers to "Let us beware..." of logical escapes such as "...there are laws in nature" and "...thinking that the world eternally create new things." (109). Nietzsche ends this passage by prompting the question of when we will complete our "de-deification of nature." We later come to understand that this is not a rhetorical question, but rather an urge to question and not accept given "truths." At what point will we be able to take our godly and idealistic view of the world down from its comforting pedestal that is powered by the statements we tell ourselves? To be honest, as someone who struggles with anxiety and obsessive tendencies, my entire life is built on truths I tell myself - which is maybe why this string of passages crashed me so hard. 
+
+"Truths" here is an interesting concept - what are they anyway? Nietzsche gives us some examples in the following passages and then ascribes how they came to be. His examples are curt and straightforward, but once unpacked it becomes a little bit more personal rather than just abstract philosophy. These are pulled directly from passage 110:
+
+> "That there are enduring things; that there are equal things" 
+
+These two truths both showcase how we attempt to flatten the messy world into cleaner states: one across time, and the other across instances. The first is the belief that things are inherently stable: political institutions, your self-identity, love and your relationships - if you had to perceive these to be in total flux all the time, life would be quite tricky. Conversely, the second explains how we treat different occurrences of things as equals. In everyday life, this can map to our experiences very easily. For example, making the "same" mistake twice - when in reality, the full context behind them is different. Or, meeting the same "type" of people - it is much easier to classify unknowns into things we already know and understand. 
+
+> "That there are things, substances, bodies" 
+
+This is the fallacy of taking messy and complex experiences or processes and trying to simplify them into something solid. An example here might include talking about a relationship: it becomes easy to say "the relationship is strong" or the "relationship is broken" when the reality is it is a mixture of many things: trust, memories, habits of contact, etc. Another example is discussing your career: you may downgrade your experience into "my career is failing" or "my career is on track." But what is a career? A mixture of your skills, the job market, luck, timing, money and financial interests aligning - career is a useful term, however Nietzsche would advise against bundling it as just one simple "body."
+
+> "That a thing is what it appears to be"
+
+This follows with the previous truth - now that a thing appears to be one, whole 
+stable unit, then we assume its appearance reveals what it really is. The easiest real-life example of this is the appearance of other people: you see someone who is outwardly calm, and you may assume they are a secure and confident person. Or, you may use the appearance of someone's action to justify your thoughts about them: for example, assuming someone is a certain type of person based on their actions - you may assume that there are stable, fixed reasons underneath someone's behavior. 
+
+> "That our will is free"
+
+"Free will" is a fairly complex subject - but the trap becomes using it trivially to justify or to criticize. For example, referencing human behavior: saying things like "they decided to be cruel" or "they chose how to act" in reference to actions. These concepts help support responsibility and moral order, but the truth is our actions usually arise out of a complex mixture of conditions that we do not control as cleanly as imagined. The trap here then becomes how easy it is to assume that there was some cleaner way they could have acted.
+
+> “That what is good for me is also good in itself”
+
+Here, we universalize things that work and are applicable to us. We typically take things that are good for us and promote them into some upstanding moral law. This becomes tricky in a few ways. The most obvious one is applying these concepts to other people - it becomes easy to think “what is good for me must be good for others,” or "what I am doing is the 'correct' way of doing.” The more interesting way is how this becomes a limit to yourself: as you may understand now, you are not a stable, finite individual human being. You are an ever-changing complex mess of ideas and morals - the moral "laws" you uphold yourself to today may not be applicable to you in the future, and the ones you held in the past may not be applicable to you now. Holding this dogma to yourself prevents you from accepting the other points mentioned here and also prevents you from growing and changing as an individual, which is another danger in itself.
+
+---
+
+In passages 110 and 111, he labels these truths as "knowledge" and starts to unravel where these beliefs came from. He states an interesting observation: "Innumerable beings who made inferences in a way different from ours perished; for all that, their ways might have been truer" (111). Those who took the time to question truths had "a lesser probability of survival" than those who took the shortcuts mentioned prior: "...every skeptical tendency constitutes a great danger to life.” This became the basis for "logic," and it grew out of survival storytelling. This logical knowledge is not held through time based on how "truthful" it is, but rather how useful it is at the time. So, truth does not survive but rather human instinct does. 
+
+Interestingly, from an evolutionary science perspective - Nietzsche wasn't really that far off. Most of the truth examples he gives us can map directly to the human survival instincts and shortcuts our brain takes even today. For example, "A thing is what it appears to be" is easily exhibited by what modern-day psychology calls attribution errors. These are forms of cognitive biases that are based on the errors we make when we try to explain our own, and more importantly, other people's behaviors. 
+
+The "what it appears to be" portion can easily become tinted by your brain's distorted thinking. A specific example of this is the negative attribution bias: the tendency to assign negative intentions to ambiguous behaviors. For me, this truth and bias have been a huge issue in my life, and my reaction to it embodies the "what is good for me" fallacy. Classic example: I have an interaction with someone new, and at worst, it's awkward, and at best, it’s neutral. The "thing" here is the social interaction, and "what it appears to be" is instantly cast as negative, and I'm anxious. My brain takes the story and runs with it: next thing you know, we're making up stories about how this person hates me to rationalize why this interaction made me feel not great. In reality, "what it appears to be" isn't a negative thing at all, it's just a distortion. Loop through this a couple of times, and it becomes the default in soothing yourself in neutral and awkward settings, and these truths harden into rules. The final truth then becomes apparent: "what is good for me is also good in itself" becomes the justification for why this entire process feels so protective, and the cycle continues.
+
+Modern-day pop culture endlessly touts "living your truth." Apparently, the key to living a life well lived is to live authentically and to be true to yourself. With this, the irony becomes more palpable: when your "truths" are built upon fictions that kept our ancestors alive, then you actually end up living life less authentically. Anxious stories end up tearing you away from relationships and experiences and the sincere version of you, but they protect and soothe you. 
+
+When you take a moment and step out of the truths that power the loops, you become confronted with a sobering reality: there is no true order or meaning behind most of them. What happens then? To Nietzsche: "That is the question, that is the experiment" (109).
+
+[^1]: Quotes from: The Gay Science / Kaufmann / Randomhouse / 1974
