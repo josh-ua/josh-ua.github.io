@@ -1,5 +1,5 @@
 ---
-draft: false
+draft: true
 title: "how apartment designs refines taste"
 date: 2026-05-18T00:00:00+08:00
 ---
