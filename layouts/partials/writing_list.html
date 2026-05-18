@@ -1,0 +1,15 @@
+{{- $pages := .pages -}}
+{{- if gt (len $pages) 0 -}}
+<table class="writing-list">
+  {{- range $pages.ByDate.Reverse }}
+  <tr>
+    <td class="writing-list-date">
+      <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format (site.Params.theme_config.date_format | default "01-02-2006") }}</time>
+    </td>
+    <td class="writing-list-title"><a href="{{ .RelPermalink }}">{{ .Title }}</a></td>
+  </tr>
+  {{- end }}
+</table>
+{{- else -}}
+<p>Nothing here yet.</p>
+{{- end -}}

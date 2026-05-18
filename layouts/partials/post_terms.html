@@ -1,0 +1,10 @@
+<p class="post-terms">
+  type: {{ partial "writing_type.html" . }}
+  {{- with .GetTerms "tags" -}}
+    <br>tags:
+    {{- range $index, $term := . -}}
+      {{- if $index }}, {{ end -}}
+      <a href="{{ $term.RelPermalink }}">{{ $term.LinkTitle | lower }}</a>
+    {{- end -}}
+  {{- end -}}
+</p>

@@ -1,6 +1,12 @@
 baseURL = 'https://josh.dk/'
 theme = 'nostyleplease'
 
+# The posts/scraps split is handled by top-level content sections.
+# Tags remain available for optional topic labels.
+[taxonomies]
+  tag = "tags"
+
 [params.theme_config]
   appearance = "light"
+  date_format = "01-02-2006"
   isShowFooter = true

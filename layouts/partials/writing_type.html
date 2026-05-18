@@ -1,0 +1,5 @@
+{{- with site.GetPage (printf "/%s" .Section) -}}
+<a href="{{ .RelPermalink }}">{{ .Title | lower }}</a>
+{{- else -}}
+{{ .Section }}
+{{- end -}}
