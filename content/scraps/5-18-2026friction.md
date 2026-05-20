@@ -15,7 +15,7 @@ Clothes -> physical friction from trying things on and searching for articles th
 
 travel -> going the extra leg work to discover things on your own - stumbling upon things rather than researching every detail. figuring out what to do when things go wrong. even the "good" experiences can sometimes be bad ones: sometimes, the highlights are where things go wrong. 
 
-Today, optimization is king. We must optimize and cut everything that wastes time. Order your groceries from doordash; no, order your complete food from doordash. No, order your complete food from a pre-made macro friendly service. Take the uber over public transit or walking - it saves 5-10 minutes. Plan your vacation itinerary down to the minute so you have an easy path to follow.Wwho cares what you're wearing? monotone and normal fits purchased online - it fits good enough and looks OK. Literally anything to remove any possibility of encountering any friction. We must eliminate friction!
+Today, optimization is king. We must optimize and cut everything that wastes time. Order your groceries from doordash; no, order your complete food from doordash. No, order your complete food from a pre-made macro friendly service. Take the uber over public transit or walking - it saves 5-10 minutes. Plan your vacation itinerary down to the minute so you have an easy path to follow. Who cares what you're wearing? monotone and normal fits purchased online - it fits good enough and looks OK. Literally anything to remove any possibility of encountering any friction. We must eliminate friction!
 
 Why is this scary? Because friction inspires creativity. 
 

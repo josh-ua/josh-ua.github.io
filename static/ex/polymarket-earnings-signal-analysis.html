@@ -1,0 +1,1364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Polymarket Earnings Signal Analysis</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0d0f12;
+      --surface: #13161b;
+      --border: #1f2329;
+      --text: #d4d8e0;
+      --muted: #5a6072;
+      --accent: #e8c84a;
+      --accent-dim: rgba(232, 200, 74, 0.12);
+      --red: #e05c5c;
+      --green: #4caf82;
+      --mono: 'IBM Plex Mono', monospace;
+      --sans: 'IBM Plex Sans', sans-serif;
+      --serif: 'Playfair Display', serif;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      font-weight: 300;
+      line-height: 1.75;
+      font-size: 16px;
+    }
+
+    /* ── Header ── */
+    header {
+      border-bottom: 1px solid var(--border);
+      padding: 3.5rem 0 2.5rem;
+    }
+
+    .container {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    .eyebrow {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1rem;
+    }
+
+    h1 {
+      font-family: var(--serif);
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 700;
+      line-height: 1.15;
+      color: #f0f2f5;
+      margin-bottom: 1.5rem;
+    }
+
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem 1.5rem;
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      color: var(--muted);
+    }
+
+    .meta span { display: flex; align-items: center; gap: 0.4rem; }
+    .meta span::before { content: '—'; color: var(--border); }
+    .meta + .meta { margin-top: 0.75rem; }
+
+    /* ── Sections ── */
+    section {
+      padding: 3rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    section:last-child { border-bottom: none; }
+
+    h2 {
+      font-family: var(--serif);
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: #f0f2f5;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    h2 .section-num {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      color: var(--accent);
+      letter-spacing: 0.1em;
+      font-weight: 500;
+      margin-top: 0.1rem;
+    }
+
+    p { margin-bottom: 1.1rem; color: var(--text); }
+    p:last-child { margin-bottom: 0; }
+    em { font-style: italic; color: #b0b8c8; }
+    strong { font-weight: 500; color: #e0e4ec; }
+
+    /* ── Agent Pipeline ── */
+    .pipeline {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      margin: 2rem 0;
+    }
+
+    .agent {
+      display: grid;
+      grid-template-columns: 2.5rem 1fr;
+      gap: 0 1rem;
+      position: relative;
+    }
+
+    .agent-line {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .agent-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--accent);
+      margin-top: 0.35rem;
+      flex-shrink: 0;
+      box-shadow: 0 0 8px rgba(232, 200, 74, 0.4);
+    }
+
+    .agent-connector {
+      width: 1px;
+      flex: 1;
+      background: var(--border);
+      min-height: 1.5rem;
+    }
+
+    .agent:last-child .agent-connector { display: none; }
+
+    .agent-body {
+      padding-bottom: 1.75rem;
+    }
+
+    .agent-label {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      font-weight: 500;
+      color: var(--accent);
+      letter-spacing: 0.05em;
+      margin-bottom: 0.3rem;
+    }
+
+    .agent-desc { font-size: 0.9rem; color: #8892a4; line-height: 1.6; }
+
+    /* ── Agent figure ── */
+    .agent-figure {
+      margin: 2rem 0;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      background: var(--surface);
+    }
+
+    .agent-figure img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    .agent-figure figcaption {
+      padding: 0.9rem 1rem;
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      border-top: 1px solid var(--border);
+      background: #101318;
+    }
+
+    .arch-figure {
+      margin: 2rem 0;
+      padding: 1.25rem;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: linear-gradient(135deg, rgba(16, 19, 24, 0.95), rgba(10, 12, 16, 0.98));
+    }
+
+    .arch-figure img {
+      display: block;
+      width: 100%;
+      height: auto;
+      max-height: 560px;
+      object-fit: contain;
+      margin: 0 auto;
+    }
+
+
+    /* ── Callout ── */
+    .callout {
+      border-left: 2px solid var(--accent);
+      background: var(--accent-dim);
+      padding: 1rem 1.25rem;
+      border-radius: 0 4px 4px 0;
+      margin: 2rem 0;
+      font-size: 0.9rem;
+      color: #b0b8c8;
+    }
+
+    .callout strong { color: var(--accent); }
+
+    .full-writeup p {
+      color: #c6ccd8;
+      margin-bottom: 0.9rem;
+      line-height: 1.6;
+    }
+
+    .full-writeup strong {
+      color: var(--accent);
+      font-weight: 500;
+    }
+
+    .full-writeup code {
+      background: #101318;
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      padding: 0.1rem 0.3rem;
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      color: #e6e9f2;
+    }
+
+    .full-writeup .subheading {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin: 1rem 0 0.45rem;
+      padding: 0.2rem 0.6rem;
+      border-radius: 4px;
+      background: rgba(12, 14, 18, 0.7);
+      font-size: 0.88rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      color: #e6e9f2;
+    }
+
+    .full-writeup .subheading::before {
+      content: '→';
+      font-family: var(--mono);
+      color: var(--accent);
+      font-size: 0.9rem;
+    }
+
+    .full-writeup .subheading:first-child {
+      margin-top: 0;
+    }
+
+    .full-writeup .subheading-lg {
+      display: block;
+      align-items: center;
+      gap: 0.6rem;
+      margin: 0 0 0.75rem;
+      padding: 0.25rem 0.7rem 0.25rem 0.65rem;
+      border-radius: 6px;
+      background: linear-gradient(90deg, rgba(19, 22, 28, 0.95), rgba(12, 14, 18, 0.35));
+      font-size: 1.05rem;
+      font-weight: 650;
+      letter-spacing: 0.03em;
+      color: #f0f3f9;
+      text-transform: uppercase;
+    }
+
+    .full-writeup .subheading-lg::before {
+      content: '';
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      margin-right: 0.5rem;
+      border: 2px solid var(--accent);
+      border-radius: 999px;
+      vertical-align: middle;
+    }
+
+    .full-writeup .subheading-lg::after {
+      content: '';
+      display: block;
+      height: 1px;
+      margin-top: 0.6rem;
+      background: linear-gradient(90deg, rgba(80, 86, 98, 0.7), rgba(80, 86, 98, 0));
+    }
+
+    .window-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 0.45rem;
+      margin: 0.65rem 0 0.35rem;
+    }
+
+    .window-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      padding: 0.55rem 0.75rem;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: #0f1218;
+      color: #d7dde8;
+      font-size: 0.82rem;
+    }
+
+    .window-card strong {
+      font-weight: 600;
+      color: #e6e9f2;
+      letter-spacing: 0.01em;
+    }
+
+    .window-card code {
+      font-size: 0.72rem;
+      padding: 0.08rem 0.3rem;
+    }
+
+    /* ── Chart area ── */
+    .chart-wrap {
+      position: relative;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 1.5rem;
+      margin: 2rem 0;
+    }
+
+    .chart-title {
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+      margin-bottom: 1rem;
+    }
+
+    .chart-wrap canvas { display: block; }
+
+    /* ── Calibration chart ── */
+    .calibration-controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      align-items: center;
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 1rem;
+    }
+
+    .calibration-controls select {
+      background: #0f1217;
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 0.35rem 0.5rem;
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.05em;
+    }
+
+    .calibration-chart {
+      width: 100%;
+    }
+
+    .calibration-tooltip {
+      position: absolute;
+      pointer-events: none;
+      background: #0f1217;
+      color: var(--text);
+      border: 1px solid var(--border);
+      padding: 0.45rem 0.6rem;
+      border-radius: 4px;
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      display: none;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
+      z-index: 5;
+    }
+
+    .calibration-details {
+      margin-top: 1.5rem;
+      border-top: 1px solid var(--border);
+      padding-top: 1rem;
+    }
+
+    .calibration-meta {
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.75rem;
+    }
+
+    .calibration-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.75rem;
+      color: #b0b8c8;
+    }
+
+    .calibration-table th,
+    .calibration-table td {
+      border-bottom: 1px solid var(--border);
+      padding: 0.55rem 0.65rem;
+      text-align: left;
+    }
+
+    .calibration-table th {
+      background: #101318;
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    /* ── Accuracy table ── */
+    .accuracy-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+      margin: 2rem 0;
+    }
+
+    .acc-cell {
+      background: var(--surface);
+      padding: 1.1rem 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+    }
+
+    .acc-window {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .acc-value {
+      font-family: var(--mono);
+      font-size: 1.4rem;
+      font-weight: 500;
+      line-height: 1;
+    }
+
+    .acc-value.below    { color: var(--red); }
+    .acc-value.at       { color: var(--muted); }
+    .acc-value.above    { color: var(--green); }
+    .acc-value.baseline { color: var(--accent); }
+
+    .acc-label {
+      font-size: 0.7rem;
+      color: var(--muted);
+    }
+
+    /* ── Run snapshot ── */
+    .run-snapshot {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 1rem;
+      margin: 1.5rem 0;
+    }
+
+    .run-card {
+      position: relative;
+      padding: 0.9rem 1.05rem;
+      border-radius: 8px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.01);
+    }
+
+    .run-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, rgba(232, 200, 74, 0.7), rgba(232, 200, 74, 0.05));
+      border-radius: 8px 8px 0 0;
+    }
+
+    .run-label {
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+      margin-bottom: 0.55rem;
+    }
+
+    .run-value {
+      font-size: 0.95rem;
+      color: #e2e6ee;
+      line-height: 1.5;
+      margin-bottom: 0;
+    }
+
+    .run-metric {
+      display: block;
+    }
+
+    .run-note {
+      font-size: 0.8rem;
+      color: #8892a4;
+      line-height: 1.55;
+    }
+
+    /* ── What's next list ── */
+    .next-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.9rem;
+      margin: 1.5rem 0;
+    }
+
+    .next-list li {
+      display: grid;
+      grid-template-columns: 1.5rem 1fr;
+      gap: 0.5rem;
+      font-size: 0.92rem;
+      color: #8892a4;
+      line-height: 1.6;
+    }
+
+    .next-list li::before {
+      content: '→';
+      font-family: var(--mono);
+      color: var(--accent);
+      margin-top: 0.05rem;
+    }
+
+    /* ── Footer ── */
+    footer {
+      padding: 2.5rem 0;
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      color: var(--muted);
+      letter-spacing: 0.05em;
+      display: flex;
+      justify-content: space-between;
+      border-top: 1px solid var(--border);
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="container">
+    <p class="eyebrow">Work Sample &nbsp;·&nbsp; Exploratory Prototype</p>
+    <h1>Polymarket Earnings<br/>Signal Analysis</h1>
+    <div class="meta">
+      <span>ChatGPT Codex</span>
+      <span>Polymarket API</span>
+      <span>Python</span>
+      <span>62 markets</span>
+    </div>
+    <div class="meta">
+      <span>Written by: Josh Karper</span>
+    </div>
+  </div>
+</header>
+
+<main class="container">
+
+  <!-- ── 01 Hypothesis ── -->
+  <section>
+    <h2><span class="section-num">01</span> The Hypothesis</h2>
+    <p>Polymarket is a prediction market platform where traders can gamble on real-life events.  Part of the current zeitgeist amongst self-identified expert prediction traders is finding alpha: an "edge."  A lot of these are non-scalable arbitrage opportunities or seem to be straight up insider trading (granted, my internet lawyers are saying <a href="https://www.corporatecomplianceinsights.com/prediction-markets-sports-betting-insider-trading/">it's not real insider trading</a>). </p>
+      
+    <p>Unfortunately, everyone and their mother are searching for arbitrage opportunities and as a result they are hard to come by and quickly filled, or met with little liquidity to take advantage of. I also can’t seem to find myself in the rooms where government military actions are being decided, so I decided to see if there were any other edges we could explore. </p>
+
+    <p>Hidden among the prediction markets for looming military actions and religious figures re-emerging, there exists a subset of markets that in comparison seem a little more traditional: betting YES or NO on whether publicly traded companies will beat their earnings estimates. For example, <a href=https://polymarket.com/event/pypl-quarterly-earnings-nongaap-eps-02-03-2026-1pt29>will PayPal (PYPL) beat quarterly earnings?</a> Since Paypal reported below analyst's estimations for their quarterly earnings on February 3rd, 2026, the market resolved to NO. </p>
+      
+    <p>At first glance, the aggregate odds don't seem useful as a signal - even in the example above, it seems at face value Polymarket traders are fairly optimistic. I wanted to put that to the test: was there any actual signal from Polymarket in which a company would beat their estimated earnings? </p>
+    
+    <p>Once a baseline is calculated we then could explore other opportunities and see if there are any signals we could glean from a given market. For example: do late-stage swings in a market's price (say, in the final 24 hours, 6 hours, or 3 hours before an earnings report) predict how the market resolves? If traders (insiders?) with better information are moving the needle close to the deadline, that directional signal could be far more valuable than the raw odds themselves.</p>
+  </section>
+
+  <!-- ── 02 Building ── -->
+  <section>
+    <h2><span class="section-num">02</span> Building the Prototype</h2>
+    <p>I'm an engineer by trade, so the problem decomposed naturally into a pipeline: fetch the markets, pull their full price history, and run analysis across all of them. The non-trivial part was doing it fast enough to test this idea the same morning I had it. Enter: AI.</p>
+
+    <p>I used ChatGPT Codex as the primary building tool, originally 
+    treating it as a co-pilot agent that could read Polymarket's API documentation and figure out implementation details I didn't want to spend time on manually (for example, undocumented behaviors like how far back the historical data actually goes).</p>
+
+    <p>Once Codex figured out how to effectively fetch the data, the next part was implementing an agent architecture to execute the pipeline mentioned above. After riffing a bit with Codex, I was able to easily create agents that can handle each of the steps. In the end, I constructed a multi-tiered agent architecture to fetch all of the data and test this hypothesis.</p>
+
+    <div class="pipeline">
+      <div class="agent">
+        <div class="agent-line"><div class="agent-dot"></div><div class="agent-connector"></div></div>
+        <div class="agent-body">
+          <div class="agent-label">Agent 01 · Earnings Market Fetcher</div>
+          <div class="agent-desc">Given a date range, query for resolved earnings-specific markets and export findings for other agents to consume.</div>
+        </div>
+      </div>
+      <div class="agent">
+        <div class="agent-line"><div class="agent-dot"></div><div class="agent-connector"></div></div>
+        <div class="agent-body">
+          <div class="agent-label">Agent 02 · Price History Fetcher</div>
+          <div class="agent-desc">Consumes the output of Agent 01 and pulled full historical odds data in time-series increments for each individual market.</div>
+        </div>
+      </div>
+       <div class="agent">
+        <div class="agent-line"><div class="agent-dot"></div><div class="agent-connector"></div></div>
+        <div class="agent-body">
+          <div class="agent-label">Agent 03 · Earnings Market History Analyzer</div>
+          <div class="agent-desc">Consume and analyze the output of Agent 02 and return deterministic, machine-readable analytics for downstream decisioning.</div>
+        </div>
+      </div>
+      <div class="agent">
+        <div class="agent-line"><div class="agent-dot"></div><div class="agent-connector"></div></div>
+        <div class="agent-body">
+          <div class="agent-label">Agent 04 · Orchestrator and Analyzer</div>
+          <div class="agent-desc">Handle pipeline end-to-end: spawn and manage concurrent agents to fetch all of the required information, and finally look at and analyze the data from each specific market to highlight any trends. </div>
+        </div>
+      </div>
+    </div>
+
+    <figure class="arch-figure">
+      <img src="arch.svg" alt="Agent architecture diagram for concurrent market data retrieval" />
+    </figure>
+
+
+      <!-- ── 03 Running ── -->
+  <section>
+    <h2><span class="section-num">03</span> Running the Prototype</h2>
+
+    <div class="run-snapshot">
+      <div class="run-card">
+        <div class="run-label">Experiment Inputs</div>
+        <div class="run-value">Resolved earnings markets within the past 10-days (2/8/26 - 2/18/26)</div>
+      </div>
+      <div class="run-card">
+        <div class="run-label">Expected Outcomes</div>
+        <div class="run-value">Baseline odds signal plus any late-stage deviation observations</div>
+      </div>
+    </div>
+
+    <figure class="agent-figure">
+      <img src="agents.jpg" alt="Concurrent agents fetching historical market data in parallel" />
+      <figcaption>Concurrent agents spawned in parallel to look up historical market data.</figcaption>
+    </figure>
+
+    <div class="callout">
+      <strong>Mid-run course correction:</strong> Partway through, I noticed the analyzer agent wasn't outputting results in the format the orchestrator expected — each sub-agent was quietly spinning up extra compute to reformat on its own. I stopped the run, fixed the analyzer's output contract, and re-ran with a clean instruction to sub-agents: use the tool as-is, no modifications. Catching a misaligned interface between components while the system is live was one of the more interesting parts of the morning.
+    </div>
+
+    <figure class="agent-figure">
+      <img src="agents.jpg" alt="Agents duplicating analysis work before interface alignment" />
+      <figcaption>Duplicate work surfaced: multiple agents reformatting outputs before the contract was aligned.</figcaption>
+    </figure>
+
+    <p>Total wall-clock time was about 3 hours — a significant chunk of which was first-time setup friction with Codex. On a second run I'd scope model size more carefully by task complexity; using a frontier model with high reasoning on simple data-fetching steps was overkill and added real cost.</p>
+  </section>
+
+  <!-- ── 04 Findings ── -->
+  <section>
+    <h2><span class="section-num">04</span> Analysis Writeup</h2>
+
+    <div class="full-writeup">
+        <h3 class="subheading-lg">Directional Drift - Original Hypothesis</h3>
+        <h4 class="subheading">Baseline calculation</h4>
+        <p>The baseline is a naive strategy: always predict YES (the company will beat earnings). Out of the 62 markets analyzed, 41 resolved YES — giving a baseline accuracy of <code>41 / 62 = 66.1%</code>. Any signal we test needs to beat this to be useful.</p>
+        <h4 class="subheading">Analysis Windows</h4>
+        <p>Let <code>T</code> be the market resolution time. All analysis windows end at <code>T − 3h</code>. So:</p>
+        <div class="window-grid" aria-label="Exact windows">
+          <div class="window-card"><strong>1h</strong><code>[T−4h, T−3h]</code></div>
+          <div class="window-card"><strong>6h</strong><code>[T−9h, T−3h]</code></div>
+          <div class="window-card"><strong>1d</strong><code>[T−27h, T−3h]</code></div>
+          <div class="window-card"><strong>3d</strong><code>[T−75h, T−3h]</code></div>
+          <div class="window-card"><strong>7d</strong><code>[T−171h, T−3h]</code></div>
+         </div>
+             <div class="callout">
+      <strong>Why <code>T − 3h</code>:</strong> The resolution time for the prediction markets and the time when the respective companies release their earnings information usually do not line up. As a result, there’s typically a small window in which the odds converge to the “winning” bet before Polymarket resolves the market. Including that window would inflate accuracy artificially — the odds have already moved to reflect the known outcome. We exclude the last 3 hours to test whether the market has genuine predictive signal <em>before</em> the answer is known.
+    </div>
+         <h4 class="subheading">How “directional accuracy” is calculated</h4>
+         <p>Pick a window, compute the YES price change based on the start and end in the window: <code>return = price_end − price_start</code>. </p>
+          
+         <p>If it’s positive, that’s a YES/beat prediction; if negative, a NO/miss. </p>
+          
+          <p>Then accuracy is <code>correct / total</code>, skipping windows with no movement.</p>
+         <h4 class="subheading">Results after analyzing 62 markets</h4>
+        </div>
+
+    <!-- Accuracy stat grid -->
+    <div class="accuracy-grid">
+      <div class="acc-cell">
+        <span class="acc-window">Baseline</span>
+        <span class="acc-value baseline">66.1%</span>
+        <span class="acc-label">always predict YES</span>
+      </div>
+      <div class="acc-cell">
+        <span class="acc-window">1h window</span>
+        <span class="acc-value below">58.8%</span>
+        <span class="acc-label">worse than baseline</span>
+      </div>
+      <div class="acc-cell">
+        <span class="acc-window">6h window</span>
+        <span class="acc-value below">60.3%</span>
+        <span class="acc-label">below baseline</span>
+      </div>
+      <div class="acc-cell">
+        <span class="acc-window">1d window</span>
+        <span class="acc-value at">67.2%</span>
+        <span class="acc-label">roughly at baseline</span>
+      </div>
+      <div class="acc-cell">
+        <span class="acc-window">3–7d window</span>
+        <span class="acc-value above">72.4–72.6%</span>
+        <span class="acc-label">modestly above baseline</span>
+      </div>
+    </div>
+
+     <p>
+      From the data above, it seems that there is no useful correlation between sharp market pricing moves and eventual outcome prior to the market resolving. 3 and 7 days out there seems to be a slight edge - but not anything notable compared to our easy baseline.
+     </p>
+
+    <!-- Chart: accuracy vs baseline bar chart -->
+    <div class="chart-wrap">
+      <div class="chart-title">Directional Accuracy by Window — excl. Final 3hrs (N≈62)</div>
+      <canvas id="accuracyChart" height="220"></canvas>
+    </div>
+
+    <div class="full-writeup">
+
+      <h3 class="subheading-lg">Bucket Analysis</h3>
+        <h4 class="subheading">Hypothesis</h4>
+        <p>A separate question: is the raw <em>level</em> of the odds informative? Specifically, is there a correlation between a prediction market’s YES probability at fixed time points before resolution — 1, 3, 6, 12, and 24 hours out — and the eventual outcome?</p>
+
+        <p>In other words, can we determine whether markets with a YES probability above some threshold N at those time points reliably resolve YES?</p>
+        <h4 class="subheading">Parameters</h4>
+       <p>For each market, take the YES probability during that hour, bucket it into 10% bands (0–10, 10–20, …, 90–100), and then compute the actual resolution rate in each bucket (how often it resolved YES vs NO).</p>
+
+      <p> Goal: see whether a “high” YES probability in that pre-resolution hour is actually predictive/accurate.</p>
+     
+     <h4 class="subheading">Data results</h4>
+
+      <div class="chart-wrap">
+      <div class="chart-title">Calibration Curve — 1h Window Ending at Selected Offset (inclusive of T - 3H)</div>
+      <div class="calibration-controls">
+        <label for="calibrationWindowSelect">End offset (hours before resolution)</label>
+        <select id="calibrationWindowSelect"></select>
+      </div>
+      <div id="calibrationChart" class="calibration-chart"></div>
+      <div id="calibrationTooltip" class="calibration-tooltip"></div>
+      <div class="calibration-details">
+        <div class="calibration-meta" id="calibrationBucketMeta">Select a bucket to inspect the underlying markets.</div>
+        <table class="calibration-table">
+          <thead>
+            <tr>
+              <th>Ticker</th>
+              <th>Company</th>
+              <th>Outcome</th>
+              <th>Avg Pred</th>
+            </tr>
+          </thead>
+          <tbody id="calibrationBucketTable"></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="callout">
+      <strong>YES/NO Clarification:</strong> <code>BEAT</code> is synonymous with the company beating earnings and the market resolving to <code>YES</code>. <code>MISS</code> is the inverse with the market resolving to <code>NO</code>.
+    </div>
+      <p>Based on the charted data above, there seems to be a high correlation between a very high prediction market odds and a company beating its earnings.</p>
+      <p> Interestingly, at <strong>6, 12, and 24 hours</strong> before resolution, <strong>markets with YES odds of 90% or higher appear to reliably resolve to <code>YES</code></strong>. In the chart above, the pink dots represent groups of markets that resolved <code>YES</code> 100% of the time.</p>
+
+        </div>
+  </section>
+
+  <!-- ── 05 Next ── -->
+  <section>
+    <h2><span class="section-num">05</span> Overall Takeaways and Next Steps</h2>
+    <p>The N is small (62 markets, 10 days). Before drawing any firm conclusions:</p>
+    <ul class="next-list">
+      <li>Expand the dataset over a longer time window to see if the 3–7 day signal and the bucket signal is real or noise</li>
+      <li>Define "sharp move" more rigorously for the drift — thresholding by magnitude, not just direction</li>
+      <li>Fine tune model usage - I used the latest frontier model for most of these steps which was costly; it could be made cheaper</li>
+    </ul>
+    <p>On this dataset, with this methodology, there’s no edge in directional drift — but the bucket signal may be real and worth more investigation. However, the biggest win here is getting to that answer in a morning, before investing any real time. It’s exactly what AI-assisted prototyping enables.</p>
+  </section>
+
+  <!-- ── Appendix ── -->
+  <section>
+    <h2><span class="section-num">A</span> Appendix: More AI Usage Details</h2>
+
+    <figure class="agent-figure">
+      <img src="3hrwindowchange.jpg" alt="Codex exploring market data in multiple formats and views" />
+      <figcaption>Codex used to slice and re-examine the underlying market data across different formats and time representations.</figcaption>
+    </figure>
+
+    <figure class="agent-figure">
+      <img src="bucketcreation.jpg" alt="Codex grouping market data into probability buckets" />
+      <img src="bucketanalysis.jpg" alt="Codex digging into bucket-level statistics and distributions" />
+      <figcaption>Codex used to segment markets into probability buckets and then drill into each group — surfacing distributional patterns that weren't visible in the raw data.</figcaption>
+    </figure>
+
+    <figure class="agent-figure">
+      <img src="creation.jpg" alt="Codex used to build the interactive visualizations in this analysis" />
+      <figcaption>Codex used to generate the interactive data visualizations, charts, and layout components in this writeup.</figcaption>
+    </figure>
+  </section>
+
+</main>
+
+<footer class="container">
+  <span>Polymarket Earnings Signal Analysis</span>
+  <span>Styled with AI, written by a Human</span>
+  <span>February 2026</span>
+</footer>
+
+<script>
+  const mono = "'IBM Plex Mono', monospace";
+  Chart.defaults.color = '#5a6072';
+  Chart.defaults.font.family = mono;
+  Chart.defaults.font.size = 10;
+
+  // ── Accuracy chart (placeholder data — replace when real data arrives) ──
+  const baseline = 69;
+  const windows = ['1h', '6h', '1d', '3d', '7d'];
+  const accuracies = [58.8, 60.3, 67.2, 72.4, 72.6];
+
+  new Chart(document.getElementById('accuracyChart'), {
+    type: 'bar',
+    data: {
+      labels: windows,
+      datasets: [
+        {
+          label: 'Directional Accuracy',
+          data: accuracies,
+          backgroundColor: accuracies.map(v =>
+            v < baseline ? 'rgba(224, 92, 92, 0.7)' : 'rgba(76, 175, 130, 0.7)'
+          ),
+          borderColor: accuracies.map(v =>
+            v < baseline ? '#e05c5c' : '#4caf82'
+          ),
+          borderWidth: 1,
+          borderRadius: 3,
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: ctx => ` ${ctx.parsed.y}%`
+          }
+        },
+        annotation: { /* baseline line added below */ }
+      },
+      scales: {
+        x: {
+          grid: { color: '#1f2329' },
+          ticks: { color: '#5a6072' }
+        },
+        y: {
+          min: 50,
+          max: 80,
+          grid: { color: '#1f2329' },
+          ticks: {
+            color: '#5a6072',
+            callback: v => v + '%'
+          }
+        }
+      }
+    },
+    plugins: [{
+      id: 'baseline',
+      afterDraw(chart) {
+        const { ctx, chartArea: { left, right }, scales: { y } } = chart;
+        const yPos = y.getPixelForValue(baseline);
+        ctx.save();
+        ctx.beginPath();
+        ctx.setLineDash([4, 4]);
+        ctx.strokeStyle = 'rgba(232, 200, 74, 0.5)';
+        ctx.lineWidth = 1;
+        ctx.moveTo(left, yPos);
+        ctx.lineTo(right, yPos);
+        ctx.stroke();
+        ctx.fillStyle = 'rgba(232, 200, 74, 0.7)';
+        ctx.font = `10px ${mono}`;
+        ctx.fillText('baseline 69%', right - 78, yPos - 5);
+        ctx.restore();
+      }
+    }]
+  });
+
+    // ── PAG chart — sampled timeseries for high-level shape ──
+  const pagSeries = [
+    {x: 1769699415000, y: 71.0},
+    {x: 1769705116000, y: 66.5},
+    {x: 1769710695000, y: 67.0},
+    {x: 1769716336000, y: 67.0},
+    {x: 1769721974000, y: 67.5},
+    {x: 1769727555000, y: 67.5},
+    {x: 1769733194000, y: 67.5},
+    {x: 1769738835000, y: 68.0},
+    {x: 1769744417000, y: 67.5},
+    {x: 1769750054000, y: 68.0},
+    {x: 1769755695000, y: 68.0},
+    {x: 1769761334000, y: 68.0},
+    {x: 1769766914000, y: 67.5},
+    {x: 1769772555000, y: 68.0},
+    {x: 1769778196000, y: 68.0},
+    {x: 1769783774000, y: 68.0},
+    {x: 1769789427000, y: 67.5},
+    {x: 1769795055000, y: 68.0},
+    {x: 1769800634000, y: 67.5},
+    {x: 1769806275000, y: 67.5},
+    {x: 1769811927000, y: 68.0},
+    {x: 1769817495000, y: 67.0},
+    {x: 1769823135000, y: 67.0},
+    {x: 1769828775000, y: 67.0},
+    {x: 1769834355000, y: 67.0},
+    {x: 1769840007000, y: 67.0},
+    {x: 1769845635000, y: 67.0},
+    {x: 1769851215000, y: 67.0},
+    {x: 1769856854000, y: 67.0},
+    {x: 1769862494000, y: 67.0},
+    {x: 1769868135000, y: 67.0},
+    {x: 1769873715000, y: 67.0},
+    {x: 1769879356000, y: 67.0},
+    {x: 1769884996000, y: 67.0},
+    {x: 1769890575000, y: 67.0},
+    {x: 1769896215000, y: 67.0},
+    {x: 1769901854000, y: 67.0},
+    {x: 1769907434000, y: 67.5},
+    {x: 1769913135000, y: 67.5},
+    {x: 1769918773000, y: 67.5},
+    {x: 1769924368000, y: 67.5},
+    {x: 1769929994000, y: 67.5},
+    {x: 1769935634000, y: 67.5},
+    {x: 1769941214000, y: 67.5},
+    {x: 1769946854000, y: 67.0},
+    {x: 1769952493000, y: 67.5},
+    {x: 1769958073000, y: 67.0},
+    {x: 1769963714000, y: 67.5},
+    {x: 1769969354000, y: 67.0},
+    {x: 1769974934000, y: 64.0},
+    {x: 1769980584000, y: 64.0},
+    {x: 1769986214000, y: 64.0},
+    {x: 1769991854000, y: 64.0},
+    {x: 1769997441000, y: 64.0},
+    {x: 1770003074000, y: 64.0},
+    {x: 1770008713000, y: 64.0},
+    {x: 1770014293000, y: 64.0},
+    {x: 1770019933000, y: 64.0},
+    {x: 1770025573000, y: 64.0},
+    {x: 1770031156000, y: 64.0},
+    {x: 1770036792000, y: 64.0},
+    {x: 1770042433000, y: 64.0},
+    {x: 1770048016000, y: 64.0},
+    {x: 1770053655000, y: 64.0},
+    {x: 1770059294000, y: 64.5},
+    {x: 1770064873000, y: 68.0},
+    {x: 1770070513000, y: 68.0},
+    {x: 1770076153000, y: 67.5},
+    {x: 1770081740000, y: 67.5},
+    {x: 1770087373000, y: 67.5},
+    {x: 1770093017000, y: 67.5},
+    {x: 1770098653000, y: 67.5},
+    {x: 1770104234000, y: 68.0},
+    {x: 1770109873000, y: 67.5},
+    {x: 1770115516000, y: 68.0},
+    {x: 1770121093000, y: 67.5},
+    {x: 1770126734000, y: 68.0},
+    {x: 1770132374000, y: 68.0},
+    {x: 1770137954000, y: 67.5},
+    {x: 1770143593000, y: 67.5},
+    {x: 1770149234000, y: 68.0},
+    {x: 1770154827000, y: 67.5},
+    {x: 1770160453000, y: 68.0},
+    {x: 1770166093000, y: 68.0},
+    {x: 1770171681000, y: 67.5},
+    {x: 1770177325000, y: 68.0},
+    {x: 1770182953000, y: 68.0},
+    {x: 1770188533000, y: 68.0},
+    {x: 1770194186000, y: 67.5},
+    {x: 1770199813000, y: 67.5},
+    {x: 1770205455000, y: 67.5},
+    {x: 1770211034000, y: 67.5},
+    {x: 1770216673000, y: 67.5},
+    {x: 1770222314000, y: 67.5},
+    {x: 1770227893000, y: 67.5},
+    {x: 1770233534000, y: 67.5},
+    {x: 1770239235000, y: 67.5},
+    {x: 1770244814000, y: 67.5},
+    {x: 1770250454000, y: 67.5},
+    {x: 1770256093000, y: 67.5},
+    {x: 1770261674000, y: 67.5},
+    {x: 1770267313000, y: 67.5},
+    {x: 1770272952000, y: 67.5},
+    {x: 1770278534000, y: 68.0},
+    {x: 1770284174000, y: 67.5},
+    {x: 1770289828000, y: 68.0},
+    {x: 1770295395000, y: 67.5},
+    {x: 1770301034000, y: 68.0},
+    {x: 1770306675000, y: 68.0},
+    {x: 1770312255000, y: 68.0},
+    {x: 1770317895000, y: 68.0},
+    {x: 1770323536000, y: 68.0},
+    {x: 1770329175000, y: 67.5},
+    {x: 1770334756000, y: 67.5},
+    {x: 1770340394000, y: 70.0},
+    {x: 1770346034000, y: 70.0},
+    {x: 1770351625000, y: 70.0},
+    {x: 1770357253000, y: 67.5},
+    {x: 1770362894000, y: 68.0},
+    {x: 1770368475000, y: 67.5},
+    {x: 1770374115000, y: 68.0},
+    {x: 1770379753000, y: 68.5},
+    {x: 1770385333000, y: 68.0},
+    {x: 1770390973000, y: 68.0},
+    {x: 1770396614000, y: 71.0},
+    {x: 1770402194000, y: 70.0},
+    {x: 1770407834000, y: 70.5},
+    {x: 1770413474000, y: 70.5},
+    {x: 1770419054000, y: 68.5},
+    {x: 1770424695000, y: 68.5},
+    {x: 1770430395000, y: 68.5},
+    {x: 1770436034000, y: 68.5},
+    {x: 1770441616000, y: 68.5},
+    {x: 1770447254000, y: 68.5},
+    {x: 1770452895000, y: 68.5},
+    {x: 1770458475000, y: 68.5},
+    {x: 1770464115000, y: 68.5},
+    {x: 1770469756000, y: 68.5},
+    {x: 1770475336000, y: 68.0},
+    {x: 1770480977000, y: 68.0},
+    {x: 1770486616000, y: 68.0},
+    {x: 1770492197000, y: 68.0},
+    {x: 1770497835000, y: 70.0},
+    {x: 1770503486000, y: 70.5},
+    {x: 1770509055000, y: 70.5},
+    {x: 1770514695000, y: 70.5},
+    {x: 1770520333000, y: 70.5},
+    {x: 1770525914000, y: 70.5},
+    {x: 1770531554000, y: 70.5},
+    {x: 1770537194000, y: 70.5},
+    {x: 1770542834000, y: 71.0},
+    {x: 1770548417000, y: 71.0},
+    {x: 1770554054000, y: 71.0},
+    {x: 1770559694000, y: 71.0},
+    {x: 1770565274000, y: 70.5},
+    {x: 1770570915000, y: 70.5},
+    {x: 1770576555000, y: 70.5},
+    {x: 1770582144000, y: 70.5},
+    {x: 1770587773000, y: 70.5},
+    {x: 1770593418000, y: 70.5},
+    {x: 1770598994000, y: 70.5},
+    {x: 1770604633000, y: 70.5},
+    {x: 1770610273000, y: 70.5},
+    {x: 1770615854000, y: 70.5},
+    {x: 1770621494000, y: 70.5},
+    {x: 1770627134000, y: 70.5},
+    {x: 1770632713000, y: 70.5},
+    {x: 1770638354000, y: 70.5},
+    {x: 1770643993000, y: 70.5},
+    {x: 1770649634000, y: 70.5},
+    {x: 1770655273000, y: 70.5},
+    {x: 1770660914000, y: 70.5},
+    {x: 1770666553000, y: 70.5},
+    {x: 1770672134000, y: 70.5},
+    {x: 1770677773000, y: 70.5},
+    {x: 1770683416000, y: 70.5},
+    {x: 1770688994000, y: 70.5},
+    {x: 1770694694000, y: 70.5},
+    {x: 1770700348000, y: 72.0},
+    {x: 1770705914000, y: 72.0},
+    {x: 1770711553000, y: 71.0},
+    {x: 1770717194000, y: 71.5},
+    {x: 1770722774000, y: 71.5},
+    {x: 1770728419000, y: 72.0},
+    {x: 1770734053000, y: 69.0},
+    {x: 1770739634000, y: 68.5},
+    {x: 1770745273000, y: 71.0},
+    {x: 1770750914000, y: 61.0},
+    {x: 1770756493000, y: 61.5},
+    {x: 1770762133000, y: 66.5},
+    {x: 1770767773000, y: 59.5},
+    {x: 1770773417000, y: 54.0},
+    {x: 1770778995000, y: 54.0},
+    {x: 1770784633000, y: 59.5},
+    {x: 1770790273000, y: 61.5},
+    {x: 1770795853000, y: 74.5},
+    {x: 1770801494000, y: 70.5},
+    {x: 1770807134000, y: 71.5},
+    {x: 1770812714000, y: 0.05},
+    {x: 1770818354000, y: 0.05}
+  ];
+
+  const pagTimeFmt = new Intl.DateTimeFormat('en-US', {
+    timeZone: 'UTC',
+    month: 'short',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit'
+  });
+  const formatPagTime = ts => pagTimeFmt.format(new Date(ts));
+
+  new Chart(document.getElementById('pagChart'), {
+    type: 'line',
+    data: {      datasets: [{
+        label: 'YES probability',
+        data: pagSeries,
+        borderColor: '#e8c84a',
+        borderWidth: 1.5,
+        pointRadius: 0,
+        pointHoverRadius: 3,
+        pointBackgroundColor: '#e8c84a',
+        fill: {
+          target: 'origin',
+          above: 'rgba(232,200,74,0.05)'
+        },
+        tension: 0.3
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            title: items => formatPagTime(items[0].parsed.x),
+            label: ctx => ` ${ctx.parsed.y}% YES`
+          }
+        }
+      },
+      scales: {
+        x: {
+          type: 'linear',
+          grid: { color: '#1f2329' },
+          ticks: {
+            color: '#5a6072',
+            maxTicksLimit: 6,
+            callback: v => formatPagTime(v)
+          }
+        },
+        y: {
+          min: 0, max: 100,
+          grid: { color: '#1f2329' },
+          ticks: { color: '#5a6072', callback: v => v + '%' }
+        }
+      }
+    },
+    plugins: [{
+      id: 'missLine',
+      afterDraw(chart) {
+        const { ctx, chartArea: { top, bottom }, scales: { x } } = chart;
+        // mark the "Close" point
+        const xPos = x.getPixelForValue(pagSeries[pagSeries.length - 1].x);
+        ctx.save();
+        ctx.beginPath();
+        ctx.setLineDash([4, 4]);
+        ctx.strokeStyle = 'rgba(224, 92, 92, 0.5)';
+        ctx.lineWidth = 1;
+        ctx.moveTo(xPos, top);
+        ctx.lineTo(xPos, bottom);
+        ctx.stroke();
+        ctx.fillStyle = 'rgba(224, 92, 92, 0.7)';
+        ctx.font = `10px ${mono}`;
+        ctx.fillText('MISSED', xPos - 30, top + 14);
+        ctx.restore();
+      }
+    }]
+  });
+
+  // ── Calibration curve (D3) ──
+  const calibrationData = {"bucket_inclusive": true, "series": [{"end_offset_h": 1, "start_offset_h": 2, "rows": [{"bucket": "0.0-0.1", "count": 6, "yes": 0, "no": 6, "avg_pred": 0.011989223029537713, "yes_rate": 0.0, "markets": [{"id": "1280186", "ticker": "MAR", "company": "Marriott International", "outcome": "miss", "avg_pred": 0.032515399830460597}, {"id": "1321493", "ticker": "TRIP", "company": "Tripadvisor", "outcome": "miss", "avg_pred": 0.028452394287314497}, {"id": "1326546", "ticker": "SUN", "company": "Sunoco", "outcome": "miss", "avg_pred": 0.0048490645071209175}, {"id": "1326576", "ticker": "WAY", "company": "Waystar", "outcome": "miss", "avg_pred": 0.0034450269198073105}, {"id": "1279999", "ticker": "BP", "company": "BP", "outcome": "miss", "avg_pred": 0.00196312517660356}, {"id": "1293041", "ticker": "PAG", "company": "Penske Automotive Group", "outcome": "miss", "avg_pred": 0.0007103274559193955}]}, {"bucket": "0.1-0.2", "count": 2, "yes": 0, "no": 2, "avg_pred": 0.16847585709159274, "yes_rate": 0.0, "markets": [{"id": "1279298", "ticker": "SPGI", "company": "S&P Global", "outcome": "miss", "avg_pred": 0.17103108373004736}, {"id": "1287906", "ticker": "TMUS", "company": "T-Mobile", "outcome": "miss", "avg_pred": 0.16592063045313812}]}, {"bucket": "0.2-0.3", "count": 4, "yes": 0, "no": 4, "avg_pred": 0.2598252632869587, "yes_rate": 0.0, "markets": [{"id": "1326547", "ticker": "CZR", "company": "Caesars Entertainment", "outcome": "miss", "avg_pred": 0.2720198768197088}, {"id": "1293441", "ticker": "COIN", "company": "Coinbase Global", "outcome": "miss", "avg_pred": 0.26731843575419006}, {"id": "1293043", "ticker": "PINS", "company": "Pinterest", "outcome": "miss", "avg_pred": 0.25111669458403113}, {"id": "1288099", "ticker": "GRAB", "company": "Grab Holdings", "outcome": "miss", "avg_pred": 0.2488460459899048}]}, {"bucket": "0.3-0.4", "count": 1, "yes": 0, "no": 1, "avg_pred": 0.3074142259414226, "yes_rate": 0.0, "markets": [{"id": "1293048", "ticker": "WYNN", "company": "Wynn Resorts", "outcome": "miss", "avg_pred": 0.3074142259414226}]}, {"bucket": "0.4-0.5", "count": 3, "yes": 0, "no": 3, "avg_pred": 0.46750513788100884, "yes_rate": 0.0, "markets": [{"id": "1321481", "ticker": "WMB", "company": "The Williams Companies", "outcome": "miss", "avg_pred": 0.4902448237269167}, {"id": "1293498", "ticker": "DKNG", "company": "Draftkings Inc", "outcome": "miss", "avg_pred": 0.46794528196538193}, {"id": "1237795", "ticker": "F", "company": "Ford Motor", "outcome": "miss", "avg_pred": 0.44432530795072783}]}, {"bucket": "0.5-0.6", "count": 3, "yes": 2, "no": 1, "avg_pred": 0.5659362512879303, "yes_rate": 0.6666666666666666, "markets": [{"id": "1293448", "ticker": "ABNB", "company": "Airbnb", "outcome": "miss", "avg_pred": 0.5978282122905032}, {"id": "1279293", "ticker": "LYFT", "company": "Lyft", "outcome": "beat", "avg_pred": 0.5771064488876374}, {"id": "1321492", "ticker": "BGC", "company": "BGC Group", "outcome": "beat", "avg_pred": 0.5228740926856504}]}, {"bucket": "0.6-0.7", "count": 2, "yes": 1, "no": 1, "avg_pred": 0.640156777173444, "yes_rate": 0.5, "markets": [{"id": "1280185", "ticker": "CRSP", "company": "CRISPR Therapeutics", "outcome": "miss", "avg_pred": 0.6787233445566779}, {"id": "1293440", "ticker": "RIVN", "company": "Rivian Automotive", "outcome": "beat", "avg_pred": 0.6015902097902099}]}, {"bucket": "0.7-0.8", "count": 7, "yes": 7, "no": 0, "avg_pred": 0.7438832140260432, "yes_rate": 1.0, "markets": [{"id": "1279299", "ticker": "HOOD", "company": "Robinhood Markets", "outcome": "beat", "avg_pred": 0.779490909090909}, {"id": "1339362", "ticker": "LZB", "company": "La-Z-Boy", "outcome": "beat", "avg_pred": 0.7758561835478451}, {"id": "1293442", "ticker": "TOST", "company": "Toast", "outcome": "beat", "avg_pred": 0.7536883189294676}, {"id": "1321491", "ticker": "YELP", "company": "Yelp", "outcome": "beat", "avg_pred": 0.7376541143654114}, {"id": "1293042", "ticker": "EXPE", "company": "Expedia Group", "outcome": "beat", "avg_pred": 0.729875594073246}, {"id": "1287904", "ticker": "MCD", "company": "McDonald's", "outcome": "beat", "avg_pred": 0.7285724312184164}, {"id": "1321400", "ticker": "CHGG", "company": "Chegg", "outcome": "beat", "avg_pred": 0.7020449469570071}]}, {"bucket": "0.8-0.9", "count": 8, "yes": 8, "no": 0, "avg_pred": 0.8470996613461309, "yes_rate": 1.0, "markets": [{"id": "1321485", "ticker": "HUBS", "company": "HubSpot", "outcome": "beat", "avg_pred": 0.8700618672665915}, {"id": "1339470", "ticker": "WING", "company": "Wingstop", "outcome": "beat", "avg_pred": 0.8628929378531071}, {"id": "1321482", "ticker": "APP", "company": "Applovin", "outcome": "beat", "avg_pred": 0.8596418539325847}, {"id": "1271536", "ticker": "ON", "company": "ON Semiconductor", "outcome": "beat", "avg_pred": 0.8487137681159417}, {"id": "1321490", "ticker": "ROKU", "company": "Roku", "outcome": "beat", "avg_pred": 0.8466513121161358}, {"id": "1321401", "ticker": "GTM", "company": "Zoominfo Technologies", "outcome": "beat", "avg_pred": 0.8388065958636108}, {"id": "1321395", "ticker": "ACM", "company": "AECOM", "outcome": "beat", "avg_pred": 0.8328709136630342}, {"id": "1280187", "ticker": "NET", "company": "Cloudflare", "outcome": "beat", "avg_pred": 0.8171580419580416}]}, {"bucket": "0.9-1.0", "count": 23, "yes": 22, "no": 1, "avg_pred": 0.9860870758457557, "yes_rate": 0.9565217391304348, "markets": [{"id": "1279292", "ticker": "CVS", "company": "CVS Health", "outcome": "beat", "avg_pred": 0.9994999999999999}, {"id": "1293473", "ticker": "BUD", "company": "Anheuser-Busch", "outcome": "beat", "avg_pred": 0.9994999999999998}, {"id": "1293905", "ticker": "H", "company": "Hyatt Hotels", "outcome": "beat", "avg_pred": 0.9994999999999998}, {"id": "1321489", "ticker": "USFD", "company": "US Foods", "outcome": "beat", "avg_pred": 0.9994999999999997}, {"id": "1288098", "ticker": "HLT", "company": "Hilton Worldwide", "outcome": "beat", "avg_pred": 0.9994999999999996}, {"id": "1321402", "ticker": "DD", "company": "Dupont De Nemours", "outcome": "beat", "avg_pred": 0.9994999999999995}, {"id": "1339587", "ticker": "CRL", "company": "Charles River Laboratories International", "outcome": "beat", "avg_pred": 0.9989464184997177}, {"id": "1279575", "ticker": "KO", "company": "Coca-Cola", "outcome": "beat", "avg_pred": 0.9988905549327353}, {"id": "1326501", "ticker": "LH", "company": "Labcorp Holdings", "outcome": "beat", "avg_pred": 0.998732911392405}, {"id": "1280188", "ticker": "DDOG", "company": "Datadog Inc", "outcome": "beat", "avg_pred": 0.9981804469273737}, {"id": "1271534", "ticker": "APO", "company": "Apollo Global Management", "outcome": "beat", "avg_pred": 0.998141242937853}, {"id": "1339585", "ticker": "GRMN", "company": "Garmin", "outcome": "beat", "avg_pred": 0.9980127118644064}, {"id": "1339583", "ticker": "ADI", "company": "Analog Devices", "outcome": "beat", "avg_pred": 0.9978265162200279}, {"id": "1326168", "ticker": "TSEM", "company": "Tower Semiconductor", "outcome": "beat", "avg_pred": 0.9973250908074878}, {"id": "1326458", "ticker": "MRNA", "company": "Moderna", "outcome": "beat", "avg_pred": 0.9969981828347777}, {"id": "1326457", "ticker": "WEN", "company": "Wendy's", "outcome": "beat", "avg_pred": 0.9969432584269661}, {"id": "1339377", "ticker": "MCO", "company": "Moody's", "outcome": "beat", "avg_pred": 0.9965255259467037}, {"id": "1238101", "ticker": "HOG", "company": "Harley-Davidson", "outcome": "miss", "avg_pred": 0.9951808570623059}, {"id": "1321484", "ticker": "KHC", "company": "Kraft Heinz", "outcome": "beat", "avg_pred": 0.9920312238639527}, {"id": "1321483", "ticker": "HUM", "company": "Humana", "outcome": "beat", "avg_pred": 0.9607561044063988}, {"id": "1293861", "ticker": "PANW", "company": "Palo Alto Networks", "outcome": "beat", "avg_pred": 0.9231340985442331}, {"id": "1293499", "ticker": "AMAT", "company": "Applied Materials Inc", "outcome": "beat", "avg_pred": 0.9219980479643056}, {"id": "1287905", "ticker": "CSCO", "company": "Cisco Systems", "outcome": "beat", "avg_pred": 0.9133795518207289}]}]}, {"end_offset_h": 3, "start_offset_h": 4, "rows": [{"bucket": "0.0-0.1", "count": 1, "yes": 0, "no": 1, "avg_pred": 0.004397202797202796, "yes_rate": 0.0, "markets": [{"id": "1279999", "ticker": "BP", "company": "BP", "outcome": "miss", "avg_pred": 0.004397202797202796}]}, {"bucket": "0.1-0.2", "count": 1, "yes": 0, "no": 1, "avg_pred": 0.18490792410714288, "yes_rate": 0.0, "markets": [{"id": "1326546", "ticker": "SUN", "company": "Sunoco", "outcome": "miss", "avg_pred": 0.18490792410714288}]}, {"bucket": "0.2-0.3", "count": 4, "yes": 0, "no": 4, "avg_pred": 0.2604057849672431, "yes_rate": 0.0, "markets": [{"id": "1293441", "ticker": "COIN", "company": "Coinbase Global", "outcome": "miss", "avg_pred": 0.27431386249301287}, {"id": "1287906", "ticker": "TMUS", "company": "T-Mobile", "outcome": "miss", "avg_pred": 0.2672049776286352}, {"id": "1326547", "ticker": "CZR", "company": "Caesars Entertainment", "outcome": "miss", "avg_pred": 0.2635381355932204}, {"id": "1293043", "ticker": "PINS", "company": "Pinterest", "outcome": "miss", "avg_pred": 0.2365661641541039}]}, {"bucket": "0.3-0.4", "count": 6, "yes": 1, "no": 5, "avg_pred": 0.3389975579650908, "yes_rate": 0.16666666666666666, "markets": [{"id": "1326576", "ticker": "WAY", "company": "Waystar", "outcome": "miss", "avg_pred": 0.3846146300448431}, {"id": "1293498", "ticker": "DKNG", "company": "Draftkings Inc", "outcome": "miss", "avg_pred": 0.37800977653631285}, {"id": "1238101", "ticker": "HOG", "company": "Harley-Davidson", "outcome": "miss", "avg_pred": 0.35450963956412423}, {"id": "1293048", "ticker": "WYNN", "company": "Wynn Resorts", "outcome": "miss", "avg_pred": 0.31297489539748946}, {"id": "1288099", "ticker": "GRAB", "company": "Grab Holdings", "outcome": "miss", "avg_pred": 0.3019683827644095}, {"id": "1293905", "ticker": "H", "company": "Hyatt Hotels", "outcome": "beat", "avg_pred": 0.3019080234833659}]}, {"bucket": "0.4-0.5", "count": 2, "yes": 1, "no": 1, "avg_pred": 0.4720597377361968, "yes_rate": 0.5, "markets": [{"id": "1321483", "ticker": "HUM", "company": "Humana", "outcome": "beat", "avg_pred": 0.4827583798882684}, {"id": "1293448", "ticker": "ABNB", "company": "Airbnb", "outcome": "miss", "avg_pred": 0.4613610955841252}]}, {"bucket": "0.5-0.6", "count": 3, "yes": 2, "no": 1, "avg_pred": 0.5699801974586852, "yes_rate": 0.6666666666666666, "markets": [{"id": "1279293", "ticker": "LYFT", "company": "Lyft", "outcome": "beat", "avg_pred": 0.5977930454290522}, {"id": "1321492", "ticker": "BGC", "company": "BGC Group", "outcome": "beat", "avg_pred": 0.5893505586592177}, {"id": "1321481", "ticker": "WMB", "company": "The Williams Companies", "outcome": "miss", "avg_pred": 0.5227969882877859}]}, {"bucket": "0.6-0.7", "count": 7, "yes": 4, "no": 3, "avg_pred": 0.6658816668747759, "yes_rate": 0.5714285714285714, "markets": [{"id": "1280185", "ticker": "CRSP", "company": "CRISPR Therapeutics", "outcome": "miss", "avg_pred": 0.6999999999999998}, {"id": "1293041", "ticker": "PAG", "company": "Penske Automotive Group", "outcome": "miss", "avg_pred": 0.6850460507954228}, {"id": "1287904", "ticker": "MCD", "company": "McDonald's", "outcome": "beat", "avg_pred": 0.6842639238734954}, {"id": "1280186", "ticker": "MAR", "company": "Marriott International", "outcome": "miss", "avg_pred": 0.6636797202797203}, {"id": "1321400", "ticker": "CHGG", "company": "Chegg", "outcome": "beat", "avg_pred": 0.6612132661628886}, {"id": "1293440", "ticker": "RIVN", "company": "Rivian Automotive", "outcome": "beat", "avg_pred": 0.6511044232922732}, {"id": "1326457", "ticker": "WEN", "company": "Wendy's", "outcome": "beat", "avg_pred": 0.6158642837196314}]}, {"bucket": "0.7-0.8", "count": 11, "yes": 9, "no": 2, "avg_pred": 0.7601757908859379, "yes_rate": 0.8181818181818182, "markets": [{"id": "1339585", "ticker": "GRMN", "company": "Garmin", "outcome": "beat", "avg_pred": 0.7965732698234801}, {"id": "1321484", "ticker": "KHC", "company": "Kraft Heinz", "outcome": "beat", "avg_pred": 0.794028706800446}, {"id": "1321402", "ticker": "DD", "company": "Dupont De Nemours", "outcome": "beat", "avg_pred": 0.7919170622731084}, {"id": "1339362", "ticker": "LZB", "company": "La-Z-Boy", "outcome": "beat", "avg_pred": 0.784092832957111}, {"id": "1321493", "ticker": "TRIP", "company": "Tripadvisor", "outcome": "miss", "avg_pred": 0.7771484484204644}, {"id": "1237795", "ticker": "F", "company": "Ford Motor", "outcome": "miss", "avg_pred": 0.7665324384787476}, {"id": "1321491", "ticker": "YELP", "company": "Yelp", "outcome": "beat", "avg_pred": 0.750843793584379}, {"id": "1293042", "ticker": "EXPE", "company": "Expedia Group", "outcome": "beat", "avg_pred": 0.7394419580419581}, {"id": "1293442", "ticker": "TOST", "company": "Toast", "outcome": "beat", "avg_pred": 0.7367187064399221}, {"id": "1326168", "ticker": "TSEM", "company": "Tower Semiconductor", "outcome": "beat", "avg_pred": 0.7216773563859453}, {"id": "1321489", "ticker": "USFD", "company": "US Foods", "outcome": "beat", "avg_pred": 0.7029591265397537}]}, {"bucket": "0.8-0.9", "count": 16, "yes": 15, "no": 1, "avg_pred": 0.8415575451456843, "yes_rate": 0.9375, "markets": [{"id": "1279299", "ticker": "HOOD", "company": "Robinhood Markets", "outcome": "beat", "avg_pred": 0.874439474419905}, {"id": "1279298", "ticker": "SPGI", "company": "S&P Global", "outcome": "miss", "avg_pred": 0.873391910739191}, {"id": "1321482", "ticker": "APP", "company": "Applovin", "outcome": "beat", "avg_pred": 0.8690086810417249}, {"id": "1293499", "ticker": "AMAT", "company": "Applied Materials Inc", "outcome": "beat", "avg_pred": 0.8687963737796374}, {"id": "1321485", "ticker": "HUBS", "company": "HubSpot", "outcome": "beat", "avg_pred": 0.8637836322869952}, {"id": "1326501", "ticker": "LH", "company": "Labcorp Holdings", "outcome": "beat", "avg_pred": 0.8547525859658937}, {"id": "1321401", "ticker": "GTM", "company": "Zoominfo Technologies", "outcome": "beat", "avg_pred": 0.850983997754071}, {"id": "1339470", "ticker": "WING", "company": "Wingstop", "outcome": "beat", "avg_pred": 0.8433968609865469}, {"id": "1339377", "ticker": "MCO", "company": "Moody's", "outcome": "beat", "avg_pred": 0.8376096675048891}, {"id": "1280187", "ticker": "NET", "company": "Cloudflare", "outcome": "beat", "avg_pred": 0.8326432764886778}, {"id": "1326458", "ticker": "MRNA", "company": "Moderna", "outcome": "beat", "avg_pred": 0.8265843793584381}, {"id": "1288098", "ticker": "HLT", "company": "Hilton Worldwide", "outcome": "beat", "avg_pred": 0.822316494557633}, {"id": "1271534", "ticker": "APO", "company": "Apollo Global Management", "outcome": "beat", "avg_pred": 0.814162706178362}, {"id": "1321490", "ticker": "ROKU", "company": "Roku", "outcome": "beat", "avg_pred": 0.8134180396537279}, {"id": "1271536", "ticker": "ON", "company": "ON Semiconductor", "outcome": "beat", "avg_pred": 0.8099999999999997}, {"id": "1321395", "ticker": "ACM", "company": "AECOM", "outcome": "beat", "avg_pred": 0.8096326416152547}]}, {"bucket": "0.9-1.0", "count": 8, "yes": 8, "no": 0, "avg_pred": 0.9254488275794468, "yes_rate": 1.0, "markets": [{"id": "1293473", "ticker": "BUD", "company": "Anheuser-Busch", "outcome": "beat", "avg_pred": 0.9969914756847404}, {"id": "1287905", "ticker": "CSCO", "company": "Cisco Systems", "outcome": "beat", "avg_pred": 0.9389963656695559}, {"id": "1293861", "ticker": "PANW", "company": "Palo Alto Networks", "outcome": "beat", "avg_pred": 0.935514124293785}, {"id": "1339583", "ticker": "ADI", "company": "Analog Devices", "outcome": "beat", "avg_pred": 0.9155222626715208}, {"id": "1279575", "ticker": "KO", "company": "Coca-Cola", "outcome": "beat", "avg_pred": 0.9077559274755929}, {"id": "1279292", "ticker": "CVS", "company": "CVS Health", "outcome": "beat", "avg_pred": 0.9044797202797205}, {"id": "1280188", "ticker": "DDOG", "company": "Datadog Inc", "outcome": "beat", "avg_pred": 0.9026386952885417}, {"id": "1339587", "ticker": "CRL", "company": "Charles River Laboratories International", "outcome": "beat", "avg_pred": 0.9016920492721164}]}]}, {"end_offset_h": 6, "start_offset_h": 7, "rows": [{"bucket": "0.0-0.1", "count": 1, "yes": 0, "no": 1, "avg_pred": 0.05656593714927046, "yes_rate": 0.0, "markets": [{"id": "1279999", "ticker": "BP", "company": "BP", "outcome": "miss", "avg_pred": 0.05656593714927046}]}, {"bucket": "0.1-0.2", "count": 1, "yes": 0, "no": 1, "avg_pred": 0.17500000000000002, "yes_rate": 0.0, "markets": [{"id": "1326546", "ticker": "SUN", "company": "Sunoco", "outcome": "miss", "avg_pred": 0.17500000000000002}]}, {"bucket": "0.2-0.3", "count": 6, "yes": 0, "no": 6, "avg_pred": 0.2640517062008298, "yes_rate": 0.0, "markets": [{"id": "1238101", "ticker": "HOG", "company": "Harley-Davidson", "outcome": "miss", "avg_pred": 0.29806754484304937}, {"id": "1293043", "ticker": "PINS", "company": "Pinterest", "outcome": "miss", "avg_pred": 0.2955729457797653}, {"id": "1288099", "ticker": "GRAB", "company": "Grab Holdings", "outcome": "miss", "avg_pred": 0.2844452247191013}, {"id": "1293048", "ticker": "WYNN", "company": "Wynn Resorts", "outcome": "miss", "avg_pred": 0.26499999999999985}, {"id": "1326547", "ticker": "CZR", "company": "Caesars Entertainment", "outcome": "miss", "avg_pred": 0.22946640316205533}, {"id": "1293441", "ticker": "COIN", "company": "Coinbase Global", "outcome": "miss", "avg_pred": 0.21175811870100777}]}, {"bucket": "0.3-0.4", "count": 3, "yes": 1, "no": 2, "avg_pred": 0.34462152247758343, "yes_rate": 0.3333333333333333, "markets": [{"id": "1293905", "ticker": "H", "company": "Hyatt Hotels", "outcome": "beat", "avg_pred": 0.38032096008931054}, {"id": "1293498", "ticker": "DKNG", "company": "Draftkings Inc", "outcome": "miss", "avg_pred": 0.3316037472035795}, {"id": "1287906", "ticker": "TMUS", "company": "T-Mobile", "outcome": "miss", "avg_pred": 0.3219398601398602}]}, {"bucket": "0.4-0.5", "count": 3, "yes": 1, "no": 2, "avg_pred": 0.43337531256591727, "yes_rate": 0.3333333333333333, "markets": [{"id": "1321492", "ticker": "BGC", "company": "BGC Group", "outcome": "beat", "avg_pred": 0.48701003624198475}, {"id": "1326576", "ticker": "WAY", "company": "Waystar", "outcome": "miss", "avg_pred": 0.4080207166853304}, {"id": "1293448", "ticker": "ABNB", "company": "Airbnb", "outcome": "miss", "avg_pred": 0.40509518477043666}]}, {"bucket": "0.5-0.6", "count": 3, "yes": 2, "no": 1, "avg_pred": 0.5723045246666084, "yes_rate": 0.6666666666666666, "markets": [{"id": "1321481", "ticker": "WMB", "company": "The Williams Companies", "outcome": "miss", "avg_pred": 0.5832993006993007}, {"id": "1293440", "ticker": "RIVN", "company": "Rivian Automotive", "outcome": "beat", "avg_pred": 0.57659275891103}, {"id": "1321483", "ticker": "HUM", "company": "Humana", "outcome": "beat", "avg_pred": 0.5251370830977955}]}, {"bucket": "0.6-0.7", "count": 8, "yes": 8, "no": 0, "avg_pred": 0.6712470765888626, "yes_rate": 1.0, "markets": [{"id": "1293442", "ticker": "TOST", "company": "Toast", "outcome": "beat", "avg_pred": 0.695}, {"id": "1321483", "ticker": "HUM", "company": "Humana", "outcome": "beat", "avg_pred": 0.6876536312849165}, {"id": "1279293", "ticker": "LYFT", "company": "Lyft", "outcome": "beat", "avg_pred": 0.682944475602916}, {"id": "1326458", "ticker": "MRNA", "company": "Moderna", "outcome": "beat", "avg_pred": 0.67658982956133}, {"id": "1321492", "ticker": "BGC", "company": "BGC Group", "outcome": "beat", "avg_pred": 0.6732506272651245}, {"id": "1326457", "ticker": "WEN", "company": "Wendy's", "outcome": "beat", "avg_pred": 0.6590745933819407}, {"id": "1326168", "ticker": "TSEM", "company": "Tower Semiconductor", "outcome": "beat", "avg_pred": 0.6549999999999997}, {"id": "1321400", "ticker": "CHGG", "company": "Chegg", "outcome": "beat", "avg_pred": 0.6404634556146735}]}, {"bucket": "0.7-0.8", "count": 8, "yes": 6, "no": 2, "avg_pred": 0.7564783356218808, "yes_rate": 0.75, "markets": [{"id": "1321395", "ticker": "ACM", "company": "AECOM", "outcome": "beat", "avg_pred": 0.7850000000000001}, {"id": "1271536", "ticker": "ON", "company": "ON Semiconductor", "outcome": "beat", "avg_pred": 0.7849999999999998}, {"id": "1321484", "ticker": "KHC", "company": "Kraft Heinz", "outcome": "beat", "avg_pred": 0.7849999999999995}, {"id": "1237795", "ticker": "F", "company": "Ford Motor", "outcome": "miss", "avg_pred": 0.7749999999999999}, {"id": "1321493", "ticker": "TRIP", "company": "Tripadvisor", "outcome": "miss", "avg_pred": 0.7508382147838214}, {"id": "1321491", "ticker": "YELP", "company": "Yelp", "outcome": "beat", "avg_pred": 0.73}, {"id": "1339362", "ticker": "LZB", "company": "La-Z-Boy", "outcome": "beat", "avg_pred": 0.7259884701912261}, {"id": "1271534", "ticker": "APO", "company": "Apollo Global Management", "outcome": "beat", "avg_pred": 0.7149999999999996}]}, {"bucket": "0.8-0.9", "count": 20, "yes": 17, "no": 3, "avg_pred": 0.8385557899578073, "yes_rate": 0.85, "markets": [{"id": "1279575", "ticker": "KO", "company": "Coca-Cola", "outcome": "beat", "avg_pred": 0.8945732217573217}, {"id": "1339587", "ticker": "CRL", "company": "Charles River Laboratories International", "outcome": "beat", "avg_pred": 0.875}, {"id": "1339377", "ticker": "MCO", "company": "Moody's", "outcome": "beat", "avg_pred": 0.8686683417085427}, {"id": "1326501", "ticker": "LH", "company": "Labcorp Holdings", "outcome": "beat", "avg_pred": 0.8619681297176406}, {"id": "1321482", "ticker": "APP", "company": "Applovin", "outcome": "beat", "avg_pred": 0.8572065004202859}, {"id": "1279299", "ticker": "HOOD", "company": "Robinhood Markets", "outcome": "beat", "avg_pred": 0.8513946338736731}, {"id": "1339585", "ticker": "GRMN", "company": "Garmin", "outcome": "beat", "avg_pred": 0.8484009513150534}, {"id": "1279298", "ticker": "SPGI", "company": "S&P Global", "outcome": "miss", "avg_pred": 0.8421729428172946}, {"id": "1321401", "ticker": "GTM", "company": "Zoominfo Technologies", "outcome": "beat", "avg_pred": 0.8385134755755193}, {"id": "1293042", "ticker": "EXPE", "company": "Expedia Group", "outcome": "beat", "avg_pred": 0.8346614950634693}, {"id": "1280187", "ticker": "NET", "company": "Cloudflare", "outcome": "beat", "avg_pred": 0.8334195081050864}, {"id": "1339470", "ticker": "WING", "company": "Wingstop", "outcome": "beat", "avg_pred": 0.8304238947957475}, {"id": "1321485", "ticker": "HUBS", "company": "HubSpot", "outcome": "beat", "avg_pred": 0.8296157082748945}, {"id": "1321402", "ticker": "DD", "company": "Dupont De Nemours", "outcome": "beat", "avg_pred": 0.8227917364600776}, {"id": "1288098", "ticker": "HLT", "company": "Hilton Worldwide", "outcome": "beat", "avg_pred": 0.8212308121685739}, {"id": "1321490", "ticker": "ROKU", "company": "Roku", "outcome": "beat", "avg_pred": 0.8201710120549481}, {"id": "1279292", "ticker": "CVS", "company": "CVS Health", "outcome": "beat", "avg_pred": 0.8150000000000004}, {"id": "1280186", "ticker": "MAR", "company": "Marriott International", "outcome": "miss", "avg_pred": 0.8135132867132867}, {"id": "1293473", "ticker": "BUD", "company": "Anheuser-Busch", "outcome": "beat", "avg_pred": 0.8099999999999997}, {"id": "1280185", "ticker": "CRSP", "company": "CRISPR Therapeutics", "outcome": "miss", "avg_pred": 0.8023901483347327}]}, {"bucket": "0.9-1.0", "count": 5, "yes": 5, "no": 0, "avg_pred": 0.9170798308447223, "yes_rate": 1.0, "markets": [{"id": "1287905", "ticker": "CSCO", "company": "Cisco Systems", "outcome": "beat", "avg_pred": 0.925}, {"id": "1293499", "ticker": "AMAT", "company": "Applied Materials Inc", "outcome": "beat", "avg_pred": 0.9226759776536311}, {"id": "1280188", "ticker": "DDOG", "company": "Datadog Inc", "outcome": "beat", "avg_pred": 0.9199999999999995}, {"id": "1293861", "ticker": "PANW", "company": "Palo Alto Networks", "outcome": "beat", "avg_pred": 0.9127231765699809}, {"id": "1339583", "ticker": "ADI", "company": "Analog Devices", "outcome": "beat", "avg_pred": 0.9049999999999997}]}]}, {"end_offset_h": 12, "start_offset_h": 13, "rows": [{"bucket": "0.1-0.2", "count": 2, "yes": 0, "no": 2, "avg_pred": 0.18196814594878097, "yes_rate": 0.0, "markets": [{"id": "1293441", "ticker": "COIN", "company": "Coinbase Global", "outcome": "miss", "avg_pred": 0.19818475815523057}, {"id": "1326546", "ticker": "SUN", "company": "Sunoco", "outcome": "miss", "avg_pred": 0.16575153374233134}]}, {"bucket": "0.2-0.3", "count": 3, "yes": 0, "no": 3, "avg_pred": 0.26828075071523744, "yes_rate": 0.0, "markets": [{"id": "1293048", "ticker": "WYNN", "company": "Wynn Resorts", "outcome": "miss", "avg_pred": 0.29819452207937397}, {"id": "1326547", "ticker": "CZR", "company": "Caesars Entertainment", "outcome": "miss", "avg_pred": 0.27987331081081085}, {"id": "1288099", "ticker": "GRAB", "company": "Grab Holdings", "outcome": "miss", "avg_pred": 0.22677441925552763}]}, {"bucket": "0.3-0.4", "count": 4, "yes": 0, "no": 4, "avg_pred": 0.34900171176908806, "yes_rate": 0.0, "markets": [{"id": "1326576", "ticker": "WAY", "company": "Waystar", "outcome": "miss", "avg_pred": 0.38646580717488793}, {"id": "1238101", "ticker": "HOG", "company": "Harley-Davidson", "outcome": "miss", "avg_pred": 0.35881810561609395}, {"id": "1287906", "ticker": "TMUS", "company": "T-Mobile", "outcome": "miss", "avg_pred": 0.3438213087248323}, {"id": "1293043", "ticker": "PINS", "company": "Pinterest", "outcome": "miss", "avg_pred": 0.306901625560538}]}, {"bucket": "0.4-0.5", "count": 2, "yes": 1, "no": 1, "avg_pred": 0.46039606265422184, "yes_rate": 0.5, "markets": [{"id": "1293905", "ticker": "H", "company": "Hyatt Hotels", "outcome": "beat", "avg_pred": 0.47331520223152046}, {"id": "1279999", "ticker": "BP", "company": "BP", "outcome": "miss", "avg_pred": 0.44747692307692316}]}, {"bucket": "0.5-0.6", "count": 7, "yes": 3, "no": 4, "avg_pred": 0.5547470253499168, "yes_rate": 0.42857142857142855, "markets": [{"id": "1321481", "ticker": "WMB", "company": "The Williams Companies", "outcome": "miss", "avg_pred": 0.5921737311767987}, {"id": "1321489", "ticker": "USFD", "company": "US Foods", "outcome": "beat", "avg_pred": 0.5878407821229051}, {"id": "1287904", "ticker": "MCD", "company": "McDonald's", "outcome": "beat", "avg_pred": 0.5815303836460373}, {"id": "1293041", "ticker": "PAG", "company": "Penske Automotive Group", "outcome": "miss", "avg_pred": 0.5392520234440416}, {"id": "1293448", "ticker": "ABNB", "company": "Airbnb", "outcome": "miss", "avg_pred": 0.5299999999999996}, {"id": "1293498", "ticker": "DKNG", "company": "Draftkings Inc", "outcome": "miss", "avg_pred": 0.5272951739618403}, {"id": "1293440", "ticker": "RIVN", "company": "Rivian Automotive", "outcome": "beat", "avg_pred": 0.5251370830977955}]}, {"bucket": "0.6-0.7", "count": 8, "yes": 8, "no": 0, "avg_pred": 0.6712470765888626, "yes_rate": 1.0, "markets": [{"id": "1293442", "ticker": "TOST", "company": "Toast", "outcome": "beat", "avg_pred": 0.695}, {"id": "1321483", "ticker": "HUM", "company": "Humana", "outcome": "beat", "avg_pred": 0.6876536312849165}, {"id": "1279293", "ticker": "LYFT", "company": "Lyft", "outcome": "beat", "avg_pred": 0.682944475602916}, {"id": "1326458", "ticker": "MRNA", "company": "Moderna", "outcome": "beat", "avg_pred": 0.67658982956133}, {"id": "1321492", "ticker": "BGC", "company": "BGC Group", "outcome": "beat", "avg_pred": 0.6732506272651245}, {"id": "1326457", "ticker": "WEN", "company": "Wendy's", "outcome": "beat", "avg_pred": 0.6590745933819407}, {"id": "1326168", "ticker": "TSEM", "company": "Tower Semiconductor", "outcome": "beat", "avg_pred": 0.6549999999999997}, {"id": "1321400", "ticker": "CHGG", "company": "Chegg", "outcome": "beat", "avg_pred": 0.6404634556146735}]}, {"bucket": "0.7-0.8", "count": 8, "yes": 6, "no": 2, "avg_pred": 0.7564783356218808, "yes_rate": 0.75, "markets": [{"id": "1321395", "ticker": "ACM", "company": "AECOM", "outcome": "beat", "avg_pred": 0.7850000000000001}, {"id": "1271536", "ticker": "ON", "company": "ON Semiconductor", "outcome": "beat", "avg_pred": 0.7849999999999998}, {"id": "1321484", "ticker": "KHC", "company": "Kraft Heinz", "outcome": "beat", "avg_pred": 0.7849999999999995}, {"id": "1237795", "ticker": "F", "company": "Ford Motor", "outcome": "miss", "avg_pred": 0.7749999999999999}, {"id": "1321493", "ticker": "TRIP", "company": "Tripadvisor", "outcome": "miss", "avg_pred": 0.7508382147838214}, {"id": "1321491", "ticker": "YELP", "company": "Yelp", "outcome": "beat", "avg_pred": 0.73}, {"id": "1339362", "ticker": "LZB", "company": "La-Z-Boy", "outcome": "beat", "avg_pred": 0.7259884701912261}, {"id": "1271534", "ticker": "APO", "company": "Apollo Global Management", "outcome": "beat", "avg_pred": 0.7149999999999996}]}, {"bucket": "0.8-0.9", "count": 20, "yes": 17, "no": 3, "avg_pred": 0.8385557899578073, "yes_rate": 0.85, "markets": [{"id": "1279575", "ticker": "KO", "company": "Coca-Cola", "outcome": "beat", "avg_pred": 0.8945732217573217}, {"id": "1339587", "ticker": "CRL", "company": "Charles River Laboratories International", "outcome": "beat", "avg_pred": 0.875}, {"id": "1339377", "ticker": "MCO", "company": "Moody's", "outcome": "beat", "avg_pred": 0.8686683417085427}, {"id": "1326501", "ticker": "LH", "company": "Labcorp Holdings", "outcome": "beat", "avg_pred": 0.8619681297176406}, {"id": "1321482", "ticker": "APP", "company": "Applovin", "outcome": "beat", "avg_pred": 0.8572065004202859}, {"id": "1279299", "ticker": "HOOD", "company": "Robinhood Markets", "outcome": "beat", "avg_pred": 0.8513946338736731}, {"id": "1339585", "ticker": "GRMN", "company": "Garmin", "outcome": "beat", "avg_pred": 0.8484009513150534}, {"id": "1279298", "ticker": "SPGI", "company": "S&P Global", "outcome": "miss", "avg_pred": 0.8421729428172946}, {"id": "1321401", "ticker": "GTM", "company": "Zoominfo Technologies", "outcome": "beat", "avg_pred": 0.8385134755755193}, {"id": "1293042", "ticker": "EXPE", "company": "Expedia Group", "outcome": "beat", "avg_pred": 0.8346614950634693}, {"id": "1280187", "ticker": "NET", "company": "Cloudflare", "outcome": "beat", "avg_pred": 0.8334195081050864}, {"id": "1339470", "ticker": "WING", "company": "Wingstop", "outcome": "beat", "avg_pred": 0.8304238947957475}, {"id": "1321485", "ticker": "HUBS", "company": "HubSpot", "outcome": "beat", "avg_pred": 0.8296157082748945}, {"id": "1321402", "ticker": "DD", "company": "Dupont De Nemours", "outcome": "beat", "avg_pred": 0.8227917364600776}, {"id": "1288098", "ticker": "HLT", "company": "Hilton Worldwide", "outcome": "beat", "avg_pred": 0.8212308121685739}, {"id": "1321490", "ticker": "ROKU", "company": "Roku", "outcome": "beat", "avg_pred": 0.8201710120549481}, {"id": "1279292", "ticker": "CVS", "company": "CVS Health", "outcome": "beat", "avg_pred": 0.8150000000000004}, {"id": "1280186", "ticker": "MAR", "company": "Marriott International", "outcome": "miss", "avg_pred": 0.8135132867132867}, {"id": "1293473", "ticker": "BUD", "company": "Anheuser-Busch", "outcome": "beat", "avg_pred": 0.8099999999999997}, {"id": "1280185", "ticker": "CRSP", "company": "CRISPR Therapeutics", "outcome": "miss", "avg_pred": 0.8023901483347327}]}, {"bucket": "0.9-1.0", "count": 5, "yes": 5, "no": 0, "avg_pred": 0.9170798308447223, "yes_rate": 1.0, "markets": [{"id": "1287905", "ticker": "CSCO", "company": "Cisco Systems", "outcome": "beat", "avg_pred": 0.925}, {"id": "1293499", "ticker": "AMAT", "company": "Applied Materials Inc", "outcome": "beat", "avg_pred": 0.9226759776536311}, {"id": "1280188", "ticker": "DDOG", "company": "Datadog Inc", "outcome": "beat", "avg_pred": 0.9199999999999995}, {"id": "1293861", "ticker": "PANW", "company": "Palo Alto Networks", "outcome": "beat", "avg_pred": 0.9127231765699809}, {"id": "1339583", "ticker": "ADI", "company": "Analog Devices", "outcome": "beat", "avg_pred": 0.9049999999999997}]}]}, {"end_offset_h": 24, "start_offset_h": 25, "rows": [{"bucket": "0.1-0.2", "count": 2, "yes": 0, "no": 2, "avg_pred": 0.17179890811878595, "yes_rate": 0.0, "markets": [{"id": "1293441", "ticker": "COIN", "company": "Coinbase Global", "outcome": "miss", "avg_pred": 0.18725611470340175}, {"id": "1326546", "ticker": "SUN", "company": "Sunoco", "outcome": "miss", "avg_pred": 0.15634170153417015}]}, {"bucket": "0.2-0.3", "count": 2, "yes": 0, "no": 2, "avg_pred": 0.2728509628802679, "yes_rate": 0.0, "markets": [{"id": "1293048", "ticker": "WYNN", "company": "Wynn Resorts", "outcome": "miss", "avg_pred": 0.2807019257605359}, {"id": "1326547", "ticker": "CZR", "company": "Caesars Entertainment", "outcome": "miss", "avg_pred": 0.26499999999999996}]}, {"bucket": "0.3-0.4", "count": 3, "yes": 1, "no": 2, "avg_pred": 0.38833333333333336, "yes_rate": 0.3333333333333333, "markets": [{"id": "1238101", "ticker": "HOG", "company": "Harley-Davidson", "outcome": "miss", "avg_pred": 0.39500000000000024}, {"id": "1293043", "ticker": "PINS", "company": "Pinterest", "outcome": "miss", "avg_pred": 0.38499999999999984}, {"id": "1293905", "ticker": "H", "company": "Hyatt Hotels", "outcome": "beat", "avg_pred": 0.38499999999999984}]}, {"bucket": "0.4-0.5", "count": 2, "yes": 0, "no": 2, "avg_pred": 0.45760182640534597, "yes_rate": 0.0, "markets": [{"id": "1279999", "ticker": "BP", "company": "BP", "outcome": "miss", "avg_pred": 0.4910724272930649}, {"id": "1288099", "ticker": "GRAB", "company": "Grab Holdings", "outcome": "miss", "avg_pred": 0.42413122551762705}]}, {"bucket": "0.5-0.6", "count": 4, "yes": 1, "no": 3, "avg_pred": 0.5481950675049475, "yes_rate": 0.25, "markets": [{"id": "1326457", "ticker": "WEN", "company": "Wendy's", "outcome": "beat", "avg_pred": 0.5863777219430486}, {"id": "1293498", "ticker": "DKNG", "company": "Draftkings Inc", "outcome": "miss", "avg_pred": 0.55}, {"id": "1326576", "ticker": "WAY", "company": "Waystar", "outcome": "miss", "avg_pred": 0.544194226457399}, {"id": "1293448", "ticker": "ABNB", "company": "Airbnb", "outcome": "miss", "avg_pred": 0.5122083216193424}]}, {"bucket": "0.6-0.7", "count": 10, "yes": 7, "no": 3, "avg_pred": 0.6511188313337473, "yes_rate": 0.7, "markets": [{"id": "1293442", "ticker": "TOST", "company": "Toast", "outcome": "beat", "avg_pred": 0.6949999999999998}, {"id": "1321481", "ticker": "WMB", "company": "The Williams Companies", "outcome": "miss", "avg_pred": 0.6900000000000003}, {"id": "1279293", "ticker": "LYFT", "company": "Lyft", "outcome": "beat", "avg_pred": 0.6783917554683119}, {"id": "1321489", "ticker": "USFD", "company": "US Foods", "outcome": "beat", "avg_pred": 0.67}, {"id": "1287906", "ticker": "TMUS", "company": "T-Mobile", "outcome": "miss", "avg_pred": 0.6550391827595856}, {"id": "1287904", "ticker": "MCD", "company": "McDonald's", "outcome": "beat", "avg_pred": 0.6495268756998878}, {"id": "1321400", "ticker": "CHGG", "company": "Chegg", "outcome": "beat", "avg_pred": 0.645}, {"id": "1280185", "ticker": "CRSP", "company": "CRISPR Therapeutics", "outcome": "miss", "avg_pred": 0.6226931690929451}, {"id": "1321492", "ticker": "BGC", "company": "BGC Group", "outcome": "beat", "avg_pred": 0.6049999999999996}, {"id": "1293440", "ticker": "RIVN", "company": "Rivian Automotive", "outcome": "beat", "avg_pred": 0.6005373303167422}]}, {"bucket": "0.7-0.8", "count": 14, "yes": 10, "no": 4, "avg_pred": 0.7468711289097544, "yes_rate": 0.7142857142857143, "markets": [{"id": "1339377", "ticker": "MCO", "company": "Moody's", "outcome": "beat", "avg_pred": 0.7950000000000002}, {"id": "1271536", "ticker": "ON", "company": "ON Semiconductor", "outcome": "beat", "avg_pred": 0.7900000000000006}, {"id": "1339585", "ticker": "GRMN", "company": "Garmin", "outcome": "beat", "avg_pred": 0.7849174132138856}, {"id": "1326168", "ticker": "TSEM", "company": "Tower Semiconductor", "outcome": "beat", "avg_pred": 0.7752691771269171}, {"id": "1321490", "ticker": "ROKU", "company": "Roku", "outcome": "beat", "avg_pred": 0.7634379377977023}, {"id": "1280186", "ticker": "MAR", "company": "Marriott International", "outcome": "miss", "avg_pred": 0.7550000000000001}, {"id": "1237795", "ticker": "F", "company": "Ford Motor", "outcome": "miss", "avg_pred": 0.7311549217002234}, {"id": "1321491", "ticker": "YELP", "company": "Yelp", "outcome": "beat", "avg_pred": 0.7300000000000003}, {"id": "1321483", "ticker": "HUM", "company": "Humana", "outcome": "beat", "avg_pred": 0.729241196198994}, {"id": "1321493", "ticker": "TRIP", "company": "Tripadvisor", "outcome": "miss", "avg_pred": 0.7278244487859339}, {"id": "1339362", "ticker": "LZB", "company": "La-Z-Boy", "outcome": "beat", "avg_pred": 0.7258091753447788}, {"id": "1271534", "ticker": "APO", "company": "Apollo Global Management", "outcome": "beat", "avg_pred": 0.721832865168539}, {"id": "1326458", "ticker": "MRNA", "company": "Moderna", "outcome": "beat", "avg_pred": 0.7202509760178476}, {"id": "1293041", "ticker": "PAG", "company": "Penske Automotive Group", "outcome": "miss", "avg_pred": 0.7064576933817371}]}, {"bucket": "0.8-0.9", "count": 18, "yes": 17, "no": 1, "avg_pred": 0.8444952082893895, "yes_rate": 0.9444444444444444, "markets": [{"id": "1321482", "ticker": "APP", "company": "Applovin", "outcome": "beat", "avg_pred": 0.8990226827219263}, {"id": "1339583", "ticker": "ADI", "company": "Analog Devices", "outcome": "beat", "avg_pred": 0.8949999999999994}, {"id": "1280188", "ticker": "DDOG", "company": "Datadog Inc", "outcome": "beat", "avg_pred": 0.8781438127090296}, {"id": "1339587", "ticker": "CRL", "company": "Charles River Laboratories International", "outcome": "beat", "avg_pred": 0.875}, {"id": "1326501", "ticker": "LH", "company": "Labcorp Holdings", "outcome": "beat", "avg_pred": 0.8651020408163264}, {"id": "1279298", "ticker": "SPGI", "company": "S&P Global", "outcome": "miss", "avg_pred": 0.8550000000000005}, {"id": "1288098", "ticker": "HLT", "company": "Hilton Worldwide", "outcome": "beat", "avg_pred": 0.8525565484501535}, {"id": "1321485", "ticker": "HUBS", "company": "HubSpot", "outcome": "beat", "avg_pred": 0.8500896860986545}, {"id": "1293042", "ticker": "EXPE", "company": "Expedia Group", "outcome": "beat", "avg_pred": 0.845}, {"id": "1279299", "ticker": "HOOD", "company": "Robinhood Markets", "outcome": "beat", "avg_pred": 0.8412342745317303}, {"id": "1339470", "ticker": "WING", "company": "Wingstop", "outcome": "beat", "avg_pred": 0.8349999999999999}, {"id": "1321401", "ticker": "GTM", "company": "Zoominfo Technologies", "outcome": "beat", "avg_pred": 0.8253956228956231}, {"id": "1279292", "ticker": "CVS", "company": "CVS Health", "outcome": "beat", "avg_pred": 0.8228187919463084}, {"id": "1321484", "ticker": "KHC", "company": "Kraft Heinz", "outcome": "beat", "avg_pred": 0.8165213151295624}, {"id": "1280187", "ticker": "NET", "company": "Cloudflare", "outcome": "beat", "avg_pred": 0.8133240145373216}, {"id": "1321395", "ticker": "ACM", "company": "AECOM", "outcome": "beat", "avg_pred": 0.8117049593723735}, {"id": "1321402", "ticker": "DD", "company": "Dupont De Nemours", "outcome": "beat", "avg_pred": 0.8099999999999997}, {"id": "1293473", "ticker": "BUD", "company": "Anheuser-Busch", "outcome": "beat", "avg_pred": 0.8099999999999995}]}, {"bucket": "0.9-1.0", "count": 4, "yes": 4, "no": 0, "avg_pred": 0.9063361416954872, "yes_rate": 1.0, "markets": [{"id": "1293499", "ticker": "AMAT", "company": "Applied Materials Inc", "outcome": "beat", "avg_pred": 0.9150000000000008}, {"id": "1279575", "ticker": "KO", "company": "Coca-Cola", "outcome": "beat", "avg_pred": 0.9060571827057187}, {"id": "1287905", "ticker": "CSCO", "company": "Cisco Systems", "outcome": "beat", "avg_pred": 0.9031557606263984}, {"id": "1293861", "ticker": "PANW", "company": "Palo Alto Networks", "outcome": "beat", "avg_pred": 0.9011316234498309}]}]}]};
+
+  const calibrationSelect = document.getElementById('calibrationWindowSelect');
+  const calibrationContainer = document.getElementById('calibrationChart');
+  const calibrationTooltip = document.getElementById('calibrationTooltip');
+  const calibrationBucketMeta = document.getElementById('calibrationBucketMeta');
+  const calibrationTableBody = document.getElementById('calibrationBucketTable');
+  const calibrationWrap = calibrationContainer.closest('.chart-wrap');
+  const calibrationSeries = calibrationData.series || [];
+
+  calibrationSeries.forEach(w => {
+    const option = document.createElement('option');
+    option.value = w.end_offset_h;
+    option.textContent = `${w.end_offset_h}h (window ${w.start_offset_h}h → ${w.end_offset_h}h)`;
+    calibrationSelect.appendChild(option);
+  });
+
+  let calibrationSvg = null;
+  let calibrationX = null;
+  let calibrationY = null;
+  let calibrationRScale = null;
+  const calibrationHeight = 360;
+  const calibrationMargin = { top: 24, right: 24, bottom: 48, left: 52 };
+
+  function buildCalibrationChart() {
+    calibrationContainer.innerHTML = '';
+    const width = Math.min(680, calibrationContainer.clientWidth || 680);
+
+    calibrationSvg = d3.select(calibrationContainer)
+      .append('svg')
+      .attr('width', width)
+      .attr('height', calibrationHeight);
+
+    calibrationX = d3.scaleLinear()
+      .domain([0, 1])
+      .range([calibrationMargin.left, width - calibrationMargin.right]);
+
+    calibrationY = d3.scaleLinear()
+      .domain([0, 1])
+      .range([calibrationHeight - calibrationMargin.bottom, calibrationMargin.top]);
+
+    const axisColor = '#1f2329';
+    const tickColor = '#5a6072';
+
+    calibrationSvg.append('g')
+      .attr('transform', `translate(0,${calibrationHeight - calibrationMargin.bottom})`)
+      .call(d3.axisBottom(calibrationX).ticks(5))
+      .call(g => g.selectAll('text').attr('fill', tickColor))
+      .call(g => g.selectAll('path,line').attr('stroke', axisColor));
+
+    calibrationSvg.append('g')
+      .attr('transform', `translate(${calibrationMargin.left},0)`)
+      .call(d3.axisLeft(calibrationY).ticks(5))
+      .call(g => g.selectAll('text').attr('fill', tickColor))
+      .call(g => g.selectAll('path,line').attr('stroke', axisColor));
+
+    calibrationSvg.append('line')
+      .attr('x1', calibrationX(0))
+      .attr('y1', calibrationY(0))
+      .attr('x2', calibrationX(1))
+      .attr('y2', calibrationY(1))
+      .attr('stroke', 'rgba(232, 200, 74, 0.45)')
+      .attr('stroke-dasharray', '6,4');
+
+    calibrationSvg.append('text')
+      .attr('x', (width) / 2)
+      .attr('y', calibrationHeight - 12)
+      .attr('text-anchor', 'middle')
+      .attr('fill', tickColor)
+      .attr('font-family', mono)
+      .attr('font-size', '10px')
+      .text('Average Predicted YES Probability (bucket avg)');
+
+    calibrationSvg.append('text')
+      .attr('transform', 'rotate(-90)')
+      .attr('x', -(calibrationHeight / 2))
+      .attr('y', 14)
+      .attr('text-anchor', 'middle')
+      .attr('fill', tickColor)
+      .attr('font-family', mono)
+      .attr('font-size', '10px')
+      .text('Observed YES Rate');
+  }
+
+  function renderCalibration(endOffset) {
+    if (!calibrationSvg) return;
+    const windowData = calibrationSeries.find(d => String(d.end_offset_h) === String(endOffset));
+    const rows = windowData ? windowData.rows : [];
+    const maxCount = d3.max(rows, d => d.count) || 1;
+    calibrationRScale = d3.scaleSqrt().domain([1, maxCount]).range([4, 14]);
+
+    const points = calibrationSvg.selectAll('.calibration-point')
+      .data(rows, d => d.bucket);
+
+    points.exit().remove();
+
+    const pointsEnter = points.enter()
+      .append('circle')
+      .attr('class', 'calibration-point')
+      .attr('fill-opacity', 0.65)
+      .attr('stroke', '#0d0f12')
+      .attr('stroke-width', 0.6);
+
+    pointsEnter.merge(points)
+      .attr('fill', d => (d.yes_rate === 1 ? '#f08bd9' : '#e8c84a'))
+      .attr('cx', d => calibrationX(d.avg_pred))
+      .attr('cy', d => calibrationY(d.yes_rate))
+      .attr('r', d => calibrationRScale(d.count))
+      .on('mousemove', (event, d) => {
+        const rect = calibrationWrap.getBoundingClientRect();
+        calibrationTooltip.style.display = 'block';
+        calibrationTooltip.style.left = `${event.clientX - rect.left + 12}px`;
+        calibrationTooltip.style.top = `${event.clientY - rect.top + 12}px`;
+        calibrationTooltip.innerHTML = [
+          `Bucket ${d.bucket}`,
+          `Count: ${d.count}`,
+          `Avg pred: ${d.avg_pred.toFixed(3)}`,
+          `Yes rate: ${d.yes_rate.toFixed(3)}`
+        ].join('<br>');
+      })
+      .on('mouseout', () => {
+        calibrationTooltip.style.display = 'none';
+      })
+      .on('click', (event, d) => {
+        calibrationBucketMeta.textContent = `Selected bucket: ${d.bucket} (count ${d.count}, yes ${d.yes}, no ${d.no}, avg_pred ${d.avg_pred.toFixed(3)}, yes_rate ${d.yes_rate.toFixed(3)})`;
+        const rows = d.markets || [];
+        calibrationTableBody.innerHTML = '';
+        rows.forEach(r => {
+          const tr = document.createElement('tr');
+          const ticker = document.createElement('td');
+          const company = document.createElement('td');
+          const outcome = document.createElement('td');
+          const avgPred = document.createElement('td');
+          ticker.textContent = r.ticker || '';
+          company.textContent = r.company || '';
+          outcome.textContent = r.outcome || '';
+          avgPred.textContent = (r.avg_pred ?? 0).toFixed(3);
+          tr.appendChild(ticker);
+          tr.appendChild(company);
+          tr.appendChild(outcome);
+          tr.appendChild(avgPred);
+          calibrationTableBody.appendChild(tr);
+        });
+      });
+  }
+
+  if (calibrationSeries.length) {
+    buildCalibrationChart();
+    renderCalibration(calibrationSeries[0].end_offset_h);
+    calibrationSelect.value = calibrationSeries[0].end_offset_h;
+  }
+
+  calibrationSelect.addEventListener('change', event => renderCalibration(event.target.value));
+
+  window.addEventListener('resize', () => {
+    if (!calibrationSeries.length) return;
+    buildCalibrationChart();
+    renderCalibration(calibrationSelect.value || calibrationSeries[0].end_offset_h);
+  });
+</script>
+
+</body>
+</html>
